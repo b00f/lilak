@@ -18,7 +18,7 @@ lilak is an open source project for generating Persian dictionary for [hunspell]
     |
     |-- test
     |   |-- dotest.py   : Python script to run all test case files 
-    |   |-- text1       : 'Farsi(Persian) is Sugar', A short stpry by Mohammad-Ali Jamalzadeh
+    |   |-- text1       : 'Farsi(Persian) is Sugar', A short story by Mohammad-Ali Jamalzadeh
     |   |-- text2       : 'A Hekayat' By Saadi 
     |   |-- text3       : 'A Ghazal' By Hafez 
     |   |-- text4       : 'Yazdgerd Kingdom' By Ferdowsi
