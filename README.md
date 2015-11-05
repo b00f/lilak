@@ -1,13 +1,10 @@
 # lilak, A Persian Dictionary for Hunspell based on Persian Morphology
 
-lilak is an open source project for generating Persian dictionary for hunspell spell checker.
-This dictionary is based on Persian morphology. 
-In Persian language affixes can change the roll of a word in sentence. 
-This project helps hunspell to predict the best form of compound words based morphological rules.
+lilak is an open source project for generating Persian dictionary for [hunspell](https://github.com/hunspell/hunspell) spell checker. This dictionary is based on Persian morphology. In Persian language affixes can change the roll of a word in sentence. This project helps hunspell to predict the best form of compound words based morphological rules.
 
 
 ##Content 
-
+```
   lilak
     |-- build           : Build folder. 
     |
@@ -33,25 +30,26 @@ This project helps hunspell to predict the best form of compound words based mor
     |-- READ.me         : 
     |-- LICENCE         : License file
     \-- RULES           : 
+```
 
 ##Building Dictionary
 
 To build dictionary, run lilak.py from 'src' folder:
-
+```
 python Lilak.py
-
+```
 You can find the compiled dictionary at the 'build' folder.
 
 ##Testing
 
 Before running test make sure you have installed hunspell:
-
+```
 pip install hunspell
-
+```
 To test Lilak, run dotest.py from 'test' folder:
-
+```
 python dotest.py
-
+```
 You can find the result at 'result.log' file
 
 
@@ -72,10 +70,10 @@ lilac in English came from French lilac "shrub of genus Syringa with mauve flowe
 from Spanish lilac, from Arabic lilak, from Persian lilak, variant of nilak "bluish"
 
 As  T. S. Eliot says:
-
+```
 April is the cruelest month, breeding
 Lilacs out of the dead land, mixing
 Memory and desire, stirring
 Dull roots with spring rain. 
-
+```
 
