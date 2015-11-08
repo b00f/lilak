@@ -24,8 +24,13 @@ import hunspell
 hobj = hunspell.HunSpell('../build/fa-IR.dic', '../build/fa-IR.aff')
 result = open('result.log', 'w', encoding='utf-8')
 
+detected = 0
+not_detected = 0
 
 def run_test(filename):
+    global detected
+    global not_detected
+    
     print('processing \'{0}\' ...'.format(filename))
     result.write(filename + '\n')
     
@@ -37,7 +42,6 @@ def run_test(filename):
             continue
         
         tokens = line[:-1].split(' ')
-            
         for token in tokens:
             word = token.strip((' ?.!؟»«،:؛()-"/\\\t\''))
 
@@ -46,18 +50,21 @@ def run_test(filename):
                 continue
             
             if not hobj.spell(word):
+                not_detected = not_detected + 1
                 suggests = ''
                 for s in hobj.suggest(word):
                     suggests += s.decode('utf-8')
                     suggests += ', '
                 result.write('{0} -> {1}\n'.format(word, suggests[:-2]))
-            ## else:
+            else:
+                detected = detected + 1
             ##     stems = ''
             ##     for s in hobj.analyze(word):
             ##         stems += s.decode('utf-8')
             ##         stems += ', '
             ##     result.write('{0} -> {1}\n'.format(word, stems[:-2]))
-                
+
+
 
 run_test('text1')
 run_test('text2')
@@ -68,6 +75,8 @@ run_test('text6')
 run_test('text7')
 run_test('text8')
 
-
+percentage = ((detected * 100.0) / (detected + not_detected))
+result.write('detected: {0}, not_detected {1}, accuracy {2}\n'.format(detected, not_detected, percentage))
+    
 result.close()
 
