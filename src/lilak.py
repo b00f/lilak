@@ -539,8 +539,8 @@ class Parser:
         # sort word list
         words_s = sorted(words)
 
-        remove('../build/fa-IR.dic')
-        with open('../build/fa-IR.dic', 'w', encoding='utf-8') as f:
+        remove('../build/fa_IR.dic')
+        with open('../build/fa_IR.dic', 'w', encoding='utf-8') as f:
             f.write('{0}\n'.format(len(words_s)))
             for word in words_s:
                 f.write(word + '\n')
@@ -562,8 +562,8 @@ class Parser:
         with open('affixes', 'r', encoding='utf-8') as f:
             affix = f.read()
 
-        remove('../build/fa-IR.aff')
-        with open('../build/fa-IR.aff', 'w', encoding='utf-8') as f:
+        remove('../build/fa_IR.aff')
+        with open('../build/fa_IR.aff', 'w', encoding='utf-8') as f:
             frequency = ''
             for letter in letters_s:
                 frequency += letter[0]
@@ -571,7 +571,7 @@ class Parser:
             f.write(affix.format(VERSIAN, datetime.datetime.now().strftime("%Y-%m-%d"), frequency))
 
         # copy dict_delta
-        shutil.copy('dic_delta', '../build/fa-IR.dic_delta')
+        shutil.copy('dic_delta', '../build/fa_IR.dic_delta')
 
 
 if __name__ == '__main__':
