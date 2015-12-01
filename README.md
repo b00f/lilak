@@ -27,7 +27,8 @@ lilak
   |   |-- text5       : 'A Ghazal' By Muhammad Husayn Tabataba'i 
   |   |-- text6       : 'Have a Safe Trip' A poem by Shafii Kadkani
   |   |-- text7       : 'Se Tar' A short story by Jalal Al-e-Ahmad
-  |   \-- text8       : 'End of Shahname' By Mehdi Akhavan-Sales
+  |   |-- text8       : 'End of Shahname' By Mehdi Akhavan-Sales
+  |   \-- text9       : 'The Water's Footsteps' By Sohrab Sepehri
   |
   |-- README.md       : 
   |-- LICENCE         : License file
@@ -83,3 +84,6 @@ Dull roots with spring rain.
 
 Please feel free to contact me by this email address:
 mostafa.sedaghat@gmail.com (Mostafa Sedaghat Joo)
+
+##Thanks
+Special thanks to Hamid Farrroukh ([alefbaye2om](http://alefbaye2om.org/)) for his helps and advices. 

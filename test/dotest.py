@@ -21,7 +21,7 @@
 # -*- coding: utf-8 -*-
 
 import hunspell
-hobj = hunspell.HunSpell('../build/fa-IR.dic', '../build/fa-IR.aff')
+hobj = hunspell.HunSpell('../build/fa_IR.dic', '../build/fa_IR.aff')
 result = open('result.log', 'w', encoding='utf-8')
 
 detected = 0
@@ -74,6 +74,7 @@ run_test('text5')
 run_test('text6')
 run_test('text7')
 run_test('text8')
+run_test('text9')
 
 percentage = ((detected * 100.0) / (detected + not_detected))
 result.write('detected: {0}, not_detected {1}, accuracy {2}\n'.format(detected, not_detected, percentage))

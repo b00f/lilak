@@ -168,6 +168,9 @@ SFX z5      0        ‌هایمان/FFWW       .
 SFX z5      0        ‌هایتان/FFWW       .
 SFX z5      0        ‌هایشان/FFWW       .
 
+#علامت جمع «ان» متصل
+SFX an      N        1
+SFX an      0        ان/FFWW        .
 
 # علامت جمع «ها» متصل
 SFX j1      N        1
