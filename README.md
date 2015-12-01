@@ -87,3 +87,6 @@ mostafa.sedaghat@gmail.com (Mostafa Sedaghat Joo)
 
 ##Thanks
 Special thanks to Hamid Farrroukh ([alefbaye2om](http://alefbaye2om.org/)) for his helps and advices. 
+
+##Compiled Dictionary
+For download compiled dictionary visit: https://sourceforge.net/projects/lilak/
