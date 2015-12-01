@@ -39,7 +39,7 @@ lilak
 
 To build dictionary, run lilak.py from 'src' folder:
 ```
-python Lilak.py
+python lilak.py
 ```
 You can find the compiled dictionary at the 'build' folder.
 
@@ -66,6 +66,9 @@ It should classified in main types like: verb, noun, adjective, ...
 Also some other tags will be useful. like tense of verb, singular or plural, ...
 Check Lexicon for more information
 
+Also if you found a mistakes please report it via email to me.
+
+If you have any questions about the project, please don't hesitate to ask.
 
 ##About the Name
 
