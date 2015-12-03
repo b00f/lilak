@@ -55,7 +55,6 @@ python dotest.py
 ```
 You can find the result at 'result.log' file
 
-
 ##How to contribute
 
 The best way that you can contribute on this project is collecting words with 
@@ -70,18 +69,20 @@ Also if you found a mistakes please report it via email to me.
 
 If you have any questions about the project, please don't hesitate to ask.
 
+##Installing Lilak
+You can download compiled dictionaries at ([sourceforge](http://sourceforge.net/projects/lilak/)).
+
+For installing Lilak on OpenOffice just check ([here](http://extensions.openoffice.org/en/project/persian-dictionary-apache-openoffice/)).
+
+For installing Lilak on Mozilla  just check ([here](https://addons.mozilla.org/en-US/firefox/addon/lilak-persian-dictionary/)).
+
+For installing Lilak on Google Chrome ... Commiing soon!
+
+
 ##About the Name
 
 lilac in English came from French lilac "shrub of genus Syringa with mauve flowers" 
 from Spanish lilac, from Arabic lilak, from Persian lilak, variant of nilak "bluish"
-
-As  T. S. Eliot says:
-```
-April is the cruelest month, breeding
-Lilacs out of the dead land, mixing
-Memory and desire, stirring
-Dull roots with spring rain. 
-```
 
 ##Contact Me
 
@@ -90,6 +91,3 @@ mostafa.sedaghat@gmail.com (Mostafa Sedaghat Joo)
 
 ##Thanks
 Special thanks to Hamid Farrroukh ([alefbaye2om](http://alefbaye2om.org/)) for his helps and advices. 
-
-##Compiled Dictionary
-For download compiled dictionary visit: https://sourceforge.net/projects/lilak/
