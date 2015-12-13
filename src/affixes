@@ -1,5 +1,5 @@
 ## 
-## Lilak - Lilak, Aroma of Persian Sugar
+## Lilak, Persian Spell Checking Dictionary
 ## 
 ## Copyright 2015 Mostafa Sedaghat Joo
 ## 

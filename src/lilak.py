@@ -1,5 +1,5 @@
 ﻿## 
-## Lilak - Lilak, Aroma of Persian Sugar
+## Lilak, Persian Spell Checking Dictionary
 ## 
 ## Copyright 2015 Mostafa Sedaghat Joo
 ## 
@@ -27,7 +27,7 @@ import operator
 import shutil
 import datetime
 
-VERSIAN = '1.0'
+VERSIAN = '1.1'
 debug = 1  # set to 1 to generate a debug output file
 
 PERSIAN_HA    = '\u0647\u0627'
@@ -675,9 +675,30 @@ class Parser:
 
             f.write(affix.format(VERSIAN, datetime.datetime.now().strftime("%Y-%m-%d"), frequency))
 
-        # copy dict_delta
-        shutil.copy('dic_delta', '../build/fa_IR.dic_delta')
+        # dict_delta (foreign words)
+        ################ shutil.copy('dic_delta', '../build/fa_IR.dic_delta')
+        dic_delta = set()
+        with open('dic_delta', 'r', encoding='utf-8') as f:
+            for line in f.readlines():
+                word = line[:-1].strip()
 
+                if word.startswith('#'):
+                    continue
+                    
+                if not word:
+                    continue
+
+                if word not in self.dictionary:
+                    #debug(word)
+                    dic_delta.add(word)
+        
+        dic_delta_s = sorted(dic_delta)
+        
+        remove('../build/fa_IR.dic_delta')
+        with open('../build/fa_IR.dic_delta', 'w', encoding='utf-8') as f:
+            for word in dic_delta_s:
+                f.write(word + '\n')
+                
 
 if __name__ == '__main__':
     p = Parser()
