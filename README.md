@@ -31,8 +31,7 @@ lilak
   |   \-- text9       : 'The Water's Footsteps' By Sohrab Sepehri
   |
   |-- README.md       : 
-  |-- LICENCE         : License file
-  \-- RULES           : 
+  \-- LICENCE         : License file
 ```
 
 ##Building Dictionary
