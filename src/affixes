@@ -27,7 +27,7 @@ FLAG long
 
 TRY {2}
 KEY ضصثقفغعهخحجچپ|شسیبلاتنمکگ|ظطزرذدئو
-IGNORE ًٌٍَُِّٰٓٔـْ
+IGNORE ًٌٍَُِّٰٓٔـْ‌
 
 
 NOSPLITSUGS
@@ -305,6 +305,7 @@ REP ة   ه
 REP ة   ت
 REP أ   ا
 REP إ   ا
+REP آ   ا
 REP ؤ   و
 REP ‌    _
 
@@ -325,8 +326,9 @@ MAP دذ
 MAP ءٔ
 
 
-ICONV 4
+ICONV 5
 ICONV أ ا
 ICONV إ ا
 ICONV ؤ و
 ICONV ة ه
+ICONV ئ ی
