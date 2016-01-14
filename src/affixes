@@ -291,25 +291,15 @@ SFX t2  0        ‌ترین/j2j4        .
 REP 17
 # ZWNJ +Ya > Hamzeh 
 REP ‌ی   ٔ 
-#Hamzeh on Ya & Ya
 REP ئ   ی 
-#Arabic
 REP ي   ی 
-#Urdu
 REP ى   ی 
-#Urdu
 REP ے   ی 
-#Pushtu
 REP ۍ   ی 
-#Uyghur
 REP ې   ی 
-#Arabic
 REP ك   ک 
-#Urdu
 REP ڪ   ک 
-#Pushtu
 REP ﻙ   ک 
-#Uyghur
 REP ﻚ   ک 
 REP ة   ه
 REP ة   ت
@@ -333,3 +323,10 @@ MAP ژزر
 MAP اآأإ
 MAP دذ
 MAP ءٔ
+
+
+ICONV 4
+ICONV أ ا
+ICONV إ ا
+ICONV ؤ و
+ICONV ة ه
