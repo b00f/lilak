@@ -27,7 +27,9 @@ FLAG long
 
 TRY {2}
 KEY ضصثقفغعهخحجچپ|شسیبلاتنمکگ|ظطزرذدئو
-IGNORE ًٌٍَُِّـْ
+#IGNORE includs -> ZWNJ + Hamzeh + Diacritics (fatḥa, kasra, ḍamma, sukun, superscript alif, madda, tanwin, shadda) 
+IGNORE ًٌٍَُِّٰٓٔـْ‌
+
 
 NOSPLITSUGS
 
@@ -287,21 +289,46 @@ SFX t2  0        ‌ترین/j2j4        .
 
 
 
-REP 5
-REP ي   ی
-REP ك   ک
+REP 18
+REP ‌ی   ٔ 
+REP ئ   ی 
+REP ي   ی 
+REP ى   ی 
+REP ے   ی 
+REP ۍ   ی 
+REP ې   ی 
+REP ك   ک 
+REP ڪ   ک 
+REP ﻙ   ک 
+REP ﻚ   ک 
 REP ة   ه
 REP ة   ت
+REP أ   ا
+REP إ   ا
+REP آ   ا
+REP ؤ   و
 REP ‌    _
 
-MAP 10
+
+MAP 13
 MAP ضص
 MAP طظ
 MAP ضظ
 MAP فق
 MAP غع
 MAP چخحج
-MAP بپ
+MAP بیپ
+MAP نثت
 MAP کگ
 MAP ژزر
-MAP اآ
+MAP اآأإ
+MAP دذ
+MAP ءٔ
+
+
+ICONV 5
+ICONV أ ا
+ICONV إ ا
+ICONV ؤ و
+ICONV ة ه
+ICONV ئ ی
