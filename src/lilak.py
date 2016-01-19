@@ -615,7 +615,7 @@ class Parser:
                         label += 'y1'   # طرفة‌العینی
 
                 else:
-                    debug('{0} {1}: unknown tag'.format(word, tag))
+                    debug('{0} {1}: unknown tag'.format(word, pos))
 
                 # offensive word
                 if offensive:
