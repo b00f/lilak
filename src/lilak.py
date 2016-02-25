@@ -35,7 +35,7 @@ import shutil
 import datetime
 
 
-VERSIAN = '1.1'
+VERSIAN = '2.0'
 DEBUG = 1  # set to 1 to generate a debug output file
 
 PERSIAN_HA    = '\u0647\u0627'
