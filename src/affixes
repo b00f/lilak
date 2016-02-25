@@ -201,9 +201,20 @@ SFX j6      N        1
 SFX j6      0        ‌هایی/FFWW       .
 
 
+# علامت جمع «ها» متصل
+SFX j7      N        1
+SFX j7      0        هاست/FFWW       .
+
+
+# علامت جمع «ها» منفصل
+SFX j8      N        1
+SFX j8      0        ‌هاست/FFWW         .
+
+
 # نشان همزه
-SFX hz      N        1
-SFX hz      0        ‌ی/FFWW        .
+SFX hz      N        2
+SFX hz      0        ‌ی/FFWW       .
+SFX hz      0        ٔ/FFWW        .
 
 
 # یای نکره متصل 
@@ -213,17 +224,12 @@ SFX y1      0        ی/FFWW          .
 
 # یای نکره منفصل
 SFX y2      N        1
-SFX y2      0        ‌ی/FFWW          .
-
-
-# یای نکره منفصل
-SFX y3      N        1
-SFX y3      0        ‌ای/FFWW          .
+SFX y2      0        ‌ای/FFWW          .
 
 
 # یای نکره متصل
-SFX y4      N        1
-SFX y4      0        یی/FFWW          .
+SFX y3      N        1
+SFX y3      0        یی/FFWW          .
 
 
 ## صورت‌هاى متصل فعل «بودن» (ام، اى، است، ایم، اید، اند) در زمان حال

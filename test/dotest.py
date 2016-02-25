@@ -42,7 +42,7 @@ def run_test(filename):
         
         tokens = line[:-1].split(' ')
         for token in tokens:
-            word = token.strip((' ?.!؟»«،:؛()-"/\\\t\''))
+            word = token.strip((' ?.!؟»«،:؛()-"/\\\t\'…'))
 
             # ignore commented words
             if word.startswith('#'):
