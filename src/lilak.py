@@ -34,7 +34,6 @@ import operator
 import shutil
 import datetime
 
-
 VERSIAN = '2.0'
 DEBUG = 1  # set to 1 to generate a debug output file
 
