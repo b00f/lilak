@@ -84,15 +84,14 @@ For installing Lilak on Google Chrome ... Commiing soon!
 lilac in English came from French lilac "shrub of genus Syringa with mauve flowers" 
 from Spanish lilac, from Arabic lilak, from Persian lilak, variant of nilak "bluish"
 
-##Contact Me
+##In Memory of Abolhassan Najafi
+[Abolhassan Najafi](https://en.wikipedia.org/wiki/Abolhassan_Najafi) was an associate member of Iran's Academy of Persian Language and Literature. His most famous books is "Ghalat Nanevisim" (Let’s not write incorrect). 
 
-Please feel free to contact me by this email address:
-mostafa.sedaghat@gmail.com (Mostafa Sedaghat Joo)
 
 ##Thanks
 Special thanks to Hamid Farrroukh [alefbaye2om](http://alefbaye2om.org/) for his helps and advices. 
 
-##In Memory of Abolhassan Najafi
-[Abolhassan Najafi](https://en.wikipedia.org/wiki/Abolhassan_Najafi) was an associate member of Iran's Academy of Persian Language and Literature. 
+##Contact Me
 
-His most famous books is "Ghalat Nanevisim" (Let’s not write incorrect). 
+Please feel free to contact me by this email address:
+mostafa.sedaghat@gmail.com (Mostafa Sedaghat Joo)
