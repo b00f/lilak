@@ -70,11 +70,11 @@ Also if you found a mistakes please report it via email to me.
 If you have any questions about the project, please don't hesitate to ask.
 
 ##Installing Lilak
-You can download compiled dictionaries at ([sourceforge](http://sourceforge.net/projects/lilak/)).
+You can download compiled dictionaries at [sourceforge](http://sourceforge.net/projects/lilak/).
 
-For installing Lilak on OpenOffice just check ([here](http://extensions.openoffice.org/en/project/persian-dictionary-apache-openoffice/)).
+For installing Lilak on OpenOffice just check [here](http://extensions.openoffice.org/en/project/persian-dictionary-apache-openoffice/).
 
-For installing Lilak on Mozilla Firefox just check ([here](https://addons.mozilla.org/en-US/firefox/addon/lilak-persian-dictionary/)).
+For installing Lilak on Mozilla Firefox just check [here](https://addons.mozilla.org/en-US/firefox/addon/lilak-persian-dictionary/).
 
 For installing Lilak on Google Chrome ... Commiing soon!
 
