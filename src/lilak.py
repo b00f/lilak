@@ -34,7 +34,6 @@ import operator
 import shutil
 import datetime
 
-
 VERSIAN = '2.0'
 DEBUG = 1  # set to 1 to generate a debug output file
 
@@ -218,7 +217,7 @@ class Parser:
                             label += 'y3'   # عمویی
                         else:
                             label += 'z1'   # رهروم، رهروت، رهروش، رهرومان، رهروتان، رهروشان
-                                            ## ambiguous here: شما کارمند متروید/مترواید/مترویید؟
+                                            ## [???] ambiguous here: شما کارمند متروید/مترواید/مترویید
                             label += 'b4'   # رهروم، رهروی، رهرویم، رهروید، رهروند
                             label += 'z4'   # رهروهایم، رهروهایت، رهروهایش، رهروهایمان، رهروهایتان، رهروهایشان
                             label += 'j1'   # رهروها
@@ -237,6 +236,7 @@ class Parser:
                         label += 'j6'   # کشتی‌هایی
                         label += 'j8'   # کشتی‌هاست
                         label += 'y2'   # کشتی‌ای
+                        label += 'an'   # [???]  شکارچیان
 
                     elif word.endswith(PERSIAN_ALEF):
                         label += 'z2'   # پایم، پایت، پایش، پایمان، پایتان، پایشان
@@ -335,6 +335,8 @@ class Parser:
                             label += 'y2'   # آباده‌ای
                             label += 'hz'   # آباده‌ی، آبادهٔ
                         else:
+                                            # [???] 
+                                            # عبده -> abdoh 
                             label += 'z3'   # عبده‌ام، عبده‌ات، عبده‌اش، عبده‌مان، عبده‌تان، عبده‌شان
                             label += 'b2'   # عبده‌ام، عبده‌ای، عبده‌ایم، عبده‌اید، عبده‌اند
                             label += 'z5'   # عبده‌هایم، عبده‌هایت، عبده‌هایش، عبده‌هایمان، عبده‌هایتان، عبده‌هایشان
@@ -594,7 +596,7 @@ class Parser:
                         label += 'y1'   # افزونی
                         label += 'j2'   # افزون‌ها
                         label += 'j4'   # افزون‌های
-                        ## label += 'j8'   # افزون‌هاست ؟؟
+                        ## label += 'j8'   # [???] افزون‌هاست 
 
                         
                 elif pos == 'adjective_superlative':
@@ -653,7 +655,7 @@ class Parser:
                             label += ''     # تو
 
                     elif word.endswith(PERSIAN_YE):
-                        ### label += 'z1'   # بعضی‌مان، بعضی‌تان، بعضی‌شان ???
+                        ### label += 'z1'   # [???]  بعضی‌مان، بعضی‌تان، بعضی‌شان
                         label += 'b2'   # چی‌ام، چی‌ای، چی‌ایم، چی‌اید، چی‌اند
 
                     elif word.endswith(PERSIAN_ALEF):
