@@ -90,4 +90,9 @@ Please feel free to contact me by this email address:
 mostafa.sedaghat@gmail.com (Mostafa Sedaghat Joo)
 
 ##Thanks
-Special thanks to Hamid Farrroukh ([alefbaye2om](http://alefbaye2om.org/)) for his helps and advices. 
+Special thanks to Hamid Farrroukh [alefbaye2om](http://alefbaye2om.org/) for his helps and advices. 
+
+##In Memory of Abolhassan Najafi
+[Abolhassan Najafi](https://en.wikipedia.org/wiki/Abolhassan_Najafi) was an associate member of Iran's Academy of Persian Language and Literature. 
+
+His most famous books is "Ghalat Nanevisim" (Let’s not write incorrect). 
