@@ -37,10 +37,11 @@ import datetime
 VERSIAN = '2.0'
 DEBUG = 1  # set to 1 to generate a debug output file
 
+ZWNJ          = '\u200C'
 PERSIAN_HA    = '\u0647\u0627'
 PERSIAN_AAN   = '\u0627\u0646'
 PERSIAN_HE    = '\u0647'
-PERSIAN_YE    = '\u06cc'
+PERSIAN_YE    = '\u06CC'
 PERSIAN_WAW   = '\u0648'
 PERSIAN_ALEF  = '\u0627'
 PERSIAN_DAL   = '\u062F'
@@ -48,6 +49,17 @@ PERSIAN_ZAL   = '\u0630'
 PERSIAN_RE    = '\u0631'
 PERSIAN_ZE    = '\u0632'
 PERSIAN_ZHE   = '\u0698'
+PERSIAN_SIN   = '\u0633'
+PERSIAN_SHIN  = '\u0634'
+PERSIAN_SAD   = '\u0635'
+PERSIAN_ZAD   = '\u0636'
+PERSIAN_TA    = '\u0637'
+PERSIAN_ZA    = '\u0638'
+PERSIAN_BE    = '\u0628'
+PERSIAN_PE    = '\u067E'
+PERSIAN_TE    = '\u062A'
+PERSIAN_SE    = '\u062B'
+PERSIAN_NON   = '\u0646'
 PERSIAN_HAMZE = '\u0621'
 PERSIAN_DETACHED = (PERSIAN_WAW, PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_ZAL, \
                     PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE, PERSIAN_HAMZE)
@@ -65,11 +77,38 @@ def debug(message):
     except:
         pass
 
- 
+def count_dandane(word):
+    dandane = 0;
+    
+    for i, c in enumerate(word):
+    
+        if c == PERSIAN_BE  or \
+           c == PERSIAN_PE  or \
+           c == PERSIAN_TE  or \
+           c == PERSIAN_SE  or \
+           c == PERSIAN_SAD or \
+           c == PERSIAN_ZAD:
+            dandane = dandane + 1
+           
+        if c == PERSIAN_SIN  or \
+           c == PERSIAN_SHIN:
+            dandane = dandane + 3
+           
+        if c == PERSIAN_YE  or \
+           c == PERSIAN_NON:
+            if(i+1 < len(word)):
+                n = word[i+1]
+                
+                if n != ZWNJ:
+                    dandane = dandane + 1
+    
+    return dandane
+    
 class Parser:
     def __init__(self):
         self.dictionary = {}
-
+        
+        
     def read_lexicon(self, filename):
         with open(filename, 'r', encoding='utf-8') as f:
             for line in f.readlines():
@@ -108,6 +147,7 @@ class Parser:
                 ends_with_vowel = attrs[2]
                 ends_with_aah_uh = attrs[3]
                 label = ''
+                has_so_many_dandane = count_dandane(word) > 3
 
         ###############################################################################################
         # VERB                                                                                        #
@@ -169,7 +209,7 @@ class Parser:
         #################################################################################################
         # NOUN                                                                                          #
         #################################################################################################
-                elif pos == 'noun_common_singular':
+                elif pos == 'noun_common_singular': 
                     if word.endswith(PERSIAN_HE):
                         if ends_with_aah_uh:
                             label += 'z1'   # نگاهم، نگاهت، نگاهش، نگاهمان، نگاهتان، نگاهشان
@@ -178,12 +218,13 @@ class Parser:
                                             # کوهم، کوهی، کوهیم، کوهید، کوهند
                             label += 'z5'   # نگاه‌هایم، نگاه‌هایت، نگاه‌هایش، نگاه‌هایمان، نگاه‌هایتان، نگاه‌هایشان
                                             # کوه‌هایم، کوه‌هایت، کوه‌هایش، کوه‌هایمان، کوه‌هایتان، کوه‌هایشان
-                            label += 'j1'   # نگاهها، کوهها
                             label += 'j2'   # نگاه‌ها، کوه‌ها
                             label += 'j4'   # نگاه‌های، کوه‌های
                             label += 'j6'   # نگاه‌هایی، کوه‌هایی
                             label += 'j8'   # نگاه‌هاست، کوه‌هاست
                             label += 'y1'   # نگاهی، کوهی
+                            if(!has_so_many_dandane):
+                                label += 'j1'   # نگاهها، کوهها
                         elif  ends_with_vowel:
                             label += 'z3'   # خانه‌ام، خانه‌ات، خانه‌اش، خانه‌مان، خانه‌تان، خانه‌شان
                             label += 'b2'   # خانه‌ام، خانه‌ای، خانه‌ایم، خانه‌اید، خانه‌اند
@@ -204,7 +245,7 @@ class Parser:
                             label += 'j8'   # روبه‌هاست
                             label += 'y1'   # روبهی
 
-                    elif word.endswith(PERSIAN_WAW):
+                    elif word.endswith(PERSIAN_WAW): 
                         if ends_with_vowel:
                             label += 'z2'   # عمویم، عمویت، عمویش، عمویمان، عمویتان، عمویشان
                             label += 'b3'   # عمویم، عمویی، عموست، عموییم، عمویید، عمویند
@@ -236,7 +277,7 @@ class Parser:
                         label += 'j6'   # کشتی‌هایی
                         label += 'j8'   # کشتی‌هاست
                         label += 'y2'   # کشتی‌ای
-                        label += 'an'   # [???]  شکارچیان
+                        label += 'an'   # شکارچیان
 
                     elif word.endswith(PERSIAN_ALEF):
                         label += 'z2'   # پایم، پایت، پایش، پایمان، پایتان، پایشان
@@ -259,22 +300,35 @@ class Parser:
                         label += 'j7'   # برادرهاست
                         label += 'y1'   # برادری
                         label += 'an'   # برادران
-
+                        
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'z1'   # خطم، خطت، خطش، خطمان، خطتان، خطشان
+                        label += 'b1'   # خطم، خطی، خطست، خطیم، خطید، خطند
+                        label += 'z5'   # خط‌هایم، خط‌هایت، خط‌هایش، خط‌هایمان، خط‌هایتان، خط‌هایشان
+                        label += 'j2'   # خط‌ها
+                        label += 'j4'   # خط‌های
+                        label += 'j6'   # خط‌هایی
+                        label += 'j8'   # خط‌هاست
+                        label += 'y1'   # خطی
+                        label += 'an'   # خیاطان
+                    
                     else:
                         label += 'z1'   # کتابم، کتابت، کتابش، کتابمان، کتابتان، کتابشان
                         label += 'b1'   # کتابم، کتابی، کتابست، کتابیم، کتابید، کتابند
-                        label += 'z4'   # کتاب‌هایم، کتاب‌هایت، کتاب‌هایش، کتاب‌هایمان، کتاب‌هایتان، کتاب‌هایشان
-                        label += 'z5'   # کتابهایم، کتابهایت، کتابهایش، کتابهایمان، کتابهایتان، کتابهایشان
-                        label += 'j1'   # کتابها
+                        label += 'z5'   # کتاب‌هایم، کتاب‌هایت، کتاب‌هایش، کتاب‌هایمان، کتاب‌هایتان، کتاب‌هایشان                        
                         label += 'j2'   # کتاب‌ها
-                        label += 'j3'   # کتابهای
                         label += 'j4'   # کتاب‌های
-                        label += 'j5'   # کتابهایی
                         label += 'j6'   # کتاب‌هایی
-                        label += 'j7'   # کتابهاست
                         label += 'j8'   # کتاب‌هاست
                         label += 'y1'   # کتابی
                         label += 'an'   # صاحبان
+                        if(!has_so_many_dandane):
+                            label += 'z4'   # کتابهایم، کتابهایت، کتابهایش، کتابهایمان، کتابهایتان، کتابهایشان
+                            label += 'j1'   # کتابها
+                            label += 'j3'   # کتابهای
+                            label += 'j5'   # کتابهایی
+                            label += 'j7'   # کتابهاست
 
                 elif pos == 'noun_common_plural':
                     if word.endswith(PERSIAN_HE):
@@ -287,27 +341,34 @@ class Parser:
                             label += 'y2'   # فلاسفه‌ای
                         else:
                             label += ''     # اشربه
-
+                            
                     elif word.endswith(PERSIAN_YE):
                         label += 'z3'   # فتاوی‌ام، فتاوی‌ات، فتاوی‌اش، فتاوی‌مان، فتاوی‌تان، فتاوی‌شان
                         label += 'b2'   # فتاوی‌ام، فتاوی‌ای، فتاوی‌ایم، فتاوی‌اید، فتاوی‌اند
                         label += 'y2'   # فتاوی‌ای
-
+                        
                     elif word.endswith(PERSIAN_WAW):
                         debug('unpredicted case for: ' + word)
                         label += ''
-
+                        
                     elif word.endswith(PERSIAN_ALEF):
                         label += 'z2'   # هدایایم، هدایایت، هدایایش، هدایایمان، هدایایتان، هدایایشان
                         label += 'b3'   # هدایایم، هدایایی، هدایاست، هدایاییم، هدایایید، هدایایند
                         label += 'y1'   # هدایای
                         label += 'y3'   # هدایایی
-
+                        
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'z1'   # اقساطم، اقساطت، اقساطش، اقساطمان، اقساطتان، اقساطشان
+                        label += 'b1'   # اقساطم، اقساطی، اقساطست، اقساطیم، اقساطید، اقساطند
+                        label += 'y1'   # اقساطی
+                        # label += 'an'   # [???]
+                        
                     elif word.endswith(PERSIAN_DETACHED):
                         label += 'z1'   # آثارم، آثارت، آثارش، آثارمان، آثارتان، آثارشان
                         label += 'b1'   # آثارم، آثاری، آثارست، آثاریم، آثارید، آثارند
                         label += 'y1'   # آثاری
-
+                        
                     else:
                         label += 'z1'   # احزابم، احزابت، احزابش، احزابمان، احزابتان، احزابشان
                         label += 'b1'   # احزابم، احزابی، احزابست، احزابیم، احزابید، احزابند
@@ -398,6 +459,18 @@ class Parser:
                         label += 'j7'   # البرزهاست
                         label += 'y1'   # البرزی
 
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'z1'   # بقراطم، بقراطت، بقراطش، بقراطمان، بقراطتان، بقراطشان
+                        label += 'b1'   # بقراطم، بقراطی، بقراطست، بقراطیم، بقراطید، بقراطند
+                        label += 'z5'   # بقراط‌هایم، بقراط‌هایت، بقراط‌هایش، بقراط‌هایمان، بقراط‌هایتان، بقراط‌هایشان
+                        label += 'j2'   # بقراط‌ها
+                        label += 'j4'   # بقراط‌های
+                        label += 'j6'   # بقراط‌هایی
+                        label += 'j8'   # بقراط‌هاست
+                        label += 'y1'   # بقراطی
+                        # label += 'an'   # [???]
+                        
                     else:
                         label += 'z1'   # بنابم، بنابت، بنابش، بنابمان، بنابتان، بنابشان
                         label += 'b1'   # بنابم، بنابی، بنابست، بنابیم، بنابید، بنابند
@@ -433,14 +506,19 @@ class Parser:
                         label += ''
 
                     elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # 
-                        label += 'b1'   # 
-                        label += 'y1'   # 
-
+                        label += 'z1'   # عادم، عادت، عادش، عادمان، عادتان، عادشان
+                        label += 'b1'   # عادم، عادی، عادست، عادیم، عادید، عادند
+                        label += 'y1'   # عادی
+                    
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        debug('unpredicted case for: ' + word)
+                        label += ''
+                        
                     else:
-                        label += 'z1'   # 
-                        label += 'b1'   # 
-                        label += 'y1'   # 
+                        label += 'z1'   # اماراتم، اماراتت، اماراتش، اماراتمان، اماراتتان، اماراتشان
+                        label += 'b1'   # اماراتم، اماراتی، اماراتست، اماراتیم، اماراتید، اماراتند
+                        label += 'y1'   # اماراتی
 
         #################################################################################################
         # ADJECTIVE                                                                                     #
@@ -549,26 +627,45 @@ class Parser:
                                         # آبادترها، آبادترهای
                                         # آبادترین‌ها، آبادترین‌های
                         label += 'an'   # آبادان، تنومندان
-
+                    
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'z1'   # بانشاطم، بانشاطت، بانشاطش، بانشاطمان، بانشاطتان، بانشاطشان
+                        label += 'b1'   # بانشاطم، بانشاطی، بانشاطست، بانشاطیم، بانشاطید، بانشاطند
+                        label += 'y1'   # بانشاطی
+                        label += 'j2'   # بانشاط‌ها
+                        label += 'j4'   # بانشاط‌های
+                        label += 'j8'   # بانشاط‌هاست
+                        label += 't1'   # بانشاطتر، بانشاطترین
+                                        # بانشاطتری
+                                        # بانشاطترها، بانشاطترهای
+                                        # بانشاطترین‌ها، بانشاطترین‌های
+                        label += 't2'   # بانشاط‌تر، بانشاط‌ترین
+                                        # بانشاط‌تری
+                                        # بانشاط‌ترها، بانشاط‌ترهای
+                                        # بانشاط‌ترین‌ها، بانشاط‌ترین‌های
+                        label += 'an'   # بانشاطان
+                        
                     else:
                         label += 'z1'   # مرتبم، مرتبت، مرتبش، مرتبمان، مرتبتان، مرتبشان
                         label += 'b1'   # مرتبم، مرتبی، مرتبست، مرتبیم، مرتبید، مرتبند
                         label += 'y1'   # مرتبی
-                        label += 'j1'   # مرتبها
                         label += 'j2'   # مرتب‌ها
-                        label += 'j3'   # مرتبهای
                         label += 'j4'   # مرتب‌های
-                        label += 'j7'   # مرتبهاست
                         label += 'j8'   # مرتب‌هاست
-                        label += 't1'   # مرتبتر، مرتبترین
-                                        # مرتبتری
-                                        # مرتبترها، مرتبترهای
-                                        # مرتبترین‌ها، مرتبترین‌های
                         label += 't2'   # مرتب‌تر، مرتب‌ترین
                                         # مرتب‌تری
                                         # مرتب‌ترها، مرتب‌ترهای
                                         # مرتب‌ترین‌ها، مرتب‌ترین‌های
                         label += 'an'   # خوبان
+                        if(!has_so_many_dandane):
+                            label += 'j1'   # مرتبها
+                            label += 'j3'   # مرتبهای
+                            label += 'j7'   # مرتبهاست
+                            label += 't1'   # مرتبتر، مرتبترین
+                                            # مرتبتری
+                                            # مرتبترها، مرتبترهای
+                                            # مرتبترین‌ها، مرتبترین‌های
                                         
                 elif pos == 'adjective_comparative':
                     if word.endswith(PERSIAN_HE):
@@ -591,6 +688,10 @@ class Parser:
                         label += 'j3'   # ارشدهای
                         label += 'j7'   # ارشدهاست
 
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        debug('unpredicted case for: ' + word)
+                        
                     else:
                         label += 'z1'   # افزونم، افزونت، افزونش، افزونمان، افزونتان، افزونشان
                         label += 'b1'   # افزونم، افزونی، افزونست، افزونیم، افزونید، افزونند
@@ -620,7 +721,11 @@ class Parser:
                         label += 'j1'   # اولی‌ترها
                         label += 'j3'   # اولی‌ترهای
                         label += 'j7'   # اولی‌ترهاست
-
+                    
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        debug('unpredicted case for: ' + word)
+                        
                     else:
                         label += 'z1'   # بهترینم، بهترینت، بهترینش، بهترینمان، بهترینتان، بهترینشان
                         label += 'b1'   # بهترینم، بهترینی، بهترینست، بهترینیم، بهترینید، بهترینند
