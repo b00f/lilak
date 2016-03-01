@@ -147,7 +147,7 @@ class Parser:
                 ends_with_vowel = attrs[2]
                 ends_with_aah_uh = attrs[3]
                 label = ''
-                has_so_many_dandane = count_dandane(word) > 3
+                kam_dandane = count_dandane(word) < 5
 
         ###############################################################################################
         # VERB                                                                                        #
@@ -223,7 +223,7 @@ class Parser:
                             label += 'j6'   # نگاه‌هایی، کوه‌هایی
                             label += 'j8'   # نگاه‌هاست، کوه‌هاست
                             label += 'y1'   # نگاهی، کوهی
-                            if(!has_so_many_dandane):
+                            if kam_dandane:
                                 label += 'j1'   # نگاهها، کوهها
                         elif  ends_with_vowel:
                             label += 'z3'   # خانه‌ام، خانه‌ات، خانه‌اش، خانه‌مان، خانه‌تان، خانه‌شان
@@ -314,6 +314,7 @@ class Parser:
                         label += 'an'   # خیاطان
                     
                     else:
+                        debug(word + ' : ' +str(count_dandane(word)))
                         label += 'z1'   # کتابم، کتابت، کتابش، کتابمان، کتابتان، کتابشان
                         label += 'b1'   # کتابم، کتابی، کتابست، کتابیم، کتابید، کتابند
                         label += 'z5'   # کتاب‌هایم، کتاب‌هایت، کتاب‌هایش، کتاب‌هایمان، کتاب‌هایتان، کتاب‌هایشان                        
@@ -323,7 +324,7 @@ class Parser:
                         label += 'j8'   # کتاب‌هاست
                         label += 'y1'   # کتابی
                         label += 'an'   # صاحبان
-                        if(!has_so_many_dandane):
+                        if kam_dandane:
                             label += 'z4'   # کتابهایم، کتابهایت، کتابهایش، کتابهایمان، کتابهایتان، کتابهایشان
                             label += 'j1'   # کتابها
                             label += 'j3'   # کتابهای
@@ -658,7 +659,7 @@ class Parser:
                                         # مرتب‌ترها، مرتب‌ترهای
                                         # مرتب‌ترین‌ها، مرتب‌ترین‌های
                         label += 'an'   # خوبان
-                        if(!has_so_many_dandane):
+                        if kam_dandane:
                             label += 'j1'   # مرتبها
                             label += 'j3'   # مرتبهای
                             label += 'j7'   # مرتبهاست
