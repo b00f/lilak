@@ -266,7 +266,7 @@ class Parser:
                             label += 'j5'   # رهروهایی
                             label += 'j7'   # رهروهاست
                             label += 'y1'   # رهروی
-                            label += 'an'   # رهروان
+                            label += 'an'   # رهروان، رهروانی
 
                     elif word.endswith(PERSIAN_YE):
                         label += 'z3'   # کشتی‌ام، کشتی‌ات، کشتی‌اش، کشتی‌مان، کشتی‌تان، کشتی‌شان
@@ -277,7 +277,7 @@ class Parser:
                         label += 'j6'   # کشتی‌هایی
                         label += 'j8'   # کشتی‌هاست
                         label += 'y2'   # کشتی‌ای
-                        label += 'an'   # شکارچیان
+                        label += 'an'   # شکارچیان، شکارچیانی
 
                     elif word.endswith(PERSIAN_ALEF):
                         label += 'z2'   # پایم، پایت، پایش، پایمان، پایتان، پایشان
@@ -299,7 +299,7 @@ class Parser:
                         label += 'j5'   # برادرهایی
                         label += 'j7'   # برادرهاست
                         label += 'y1'   # برادری
-                        label += 'an'   # برادران
+                        label += 'an'   # برادران، برادرانی
                         
                     elif word.endswith(PERSIAN_TA) or \
                          word.endswith(PERSIAN_ZA):
@@ -311,10 +311,9 @@ class Parser:
                         label += 'j6'   # خط‌هایی
                         label += 'j8'   # خط‌هاست
                         label += 'y1'   # خطی
-                        label += 'an'   # خیاطان
+                        label += 'an'   # خیاطان، خیاطانی
                     
                     else:
-                        debug(word + ' : ' +str(count_dandane(word)))
                         label += 'z1'   # کتابم، کتابت، کتابش، کتابمان، کتابتان، کتابشان
                         label += 'b1'   # کتابم، کتابی، کتابست، کتابیم، کتابید، کتابند
                         label += 'z5'   # کتاب‌هایم، کتاب‌هایت، کتاب‌هایش، کتاب‌هایمان، کتاب‌هایتان، کتاب‌هایشان                        
@@ -323,7 +322,7 @@ class Parser:
                         label += 'j6'   # کتاب‌هایی
                         label += 'j8'   # کتاب‌هاست
                         label += 'y1'   # کتابی
-                        label += 'an'   # صاحبان
+                        label += 'an'   # صاحبان، صاحبانی
                         if kam_dandane:
                             label += 'z4'   # کتابهایم، کتابهایت، کتابهایش، کتابهایمان، کتابهایتان، کتابهایشان
                             label += 'j1'   # کتابها
@@ -349,7 +348,7 @@ class Parser:
                         label += 'y2'   # فتاوی‌ای
                         
                     elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
                         
                     elif word.endswith(PERSIAN_ALEF):
@@ -485,25 +484,25 @@ class Parser:
                 elif pos == 'noun_proper_plural':
                     if word.endswith(PERSIAN_HE):
                         if ends_with_aah_uh:
-                            debug('unpredicted case for: ' + word)
+                            debug('unpredicted case for: ' + word + ':' + pos)
                         elif  ends_with_vowel:
                             label += 'z3'   # ارامنه‌ام، ارامنه‌ات، ارامنه‌اش، ارامنه‌مان، ارامنه‌تان، ارامنه‌شان
                             label += 'b2'   # ارامنه‌ام، ارامنه‌ای، ارامنه‌ایم، ارامنه‌اید، ارامنه‌اند
                             label += 'hz'   # ارامنه‌ی، ارامنهٔ
                             label += 'y2'   # ارامنه‌ای
                         else:
-                            debug('unpredicted case for: ' + word)
+                            debug('unpredicted case for: ' + word + ':' + pos)
 
                     elif word.endswith(PERSIAN_YE):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_ALEF):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_DETACHED):
@@ -513,7 +512,7 @@ class Parser:
                     
                     elif word.endswith(PERSIAN_TA) or \
                          word.endswith(PERSIAN_ZA):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
                         
                     else:
@@ -589,7 +588,7 @@ class Parser:
                                             # کنجکاوتری
                                             # کنجکاوترها، کنجکاوترهای
                                             # کنجکاوترین‌ها، کنجکاوترین‌های
-                            label += 'an'   # کنجکاوان
+                            label += 'an'   # کنجکاوان، کنجکاوانی
 
                     elif word.endswith(PERSIAN_YE):
                         label += 'z3'   # عالی‌ام، عالی‌ات، عالی‌اش، عالی‌مان، عالی‌تان، عالی‌شان
@@ -627,7 +626,7 @@ class Parser:
                                         # آبادتری
                                         # آبادترها، آبادترهای
                                         # آبادترین‌ها، آبادترین‌های
-                        label += 'an'   # آبادان، تنومندان
+                        label += 'an'   # آبادان، تنومندان، آبادانی، تنومندانی
                     
                     elif word.endswith(PERSIAN_TA) or \
                          word.endswith(PERSIAN_ZA):
@@ -645,7 +644,7 @@ class Parser:
                                         # بانشاط‌تری
                                         # بانشاط‌ترها، بانشاط‌ترهای
                                         # بانشاط‌ترین‌ها، بانشاط‌ترین‌های
-                        label += 'an'   # بانشاطان
+                        label += 'an'   # بانشاطان، بانشاطانی
                         
                     else:
                         label += 'z1'   # مرتبم، مرتبت، مرتبش، مرتبمان، مرتبتان، مرتبشان
@@ -658,7 +657,7 @@ class Parser:
                                         # مرتب‌تری
                                         # مرتب‌ترها، مرتب‌ترهای
                                         # مرتب‌ترین‌ها، مرتب‌ترین‌های
-                        label += 'an'   # خوبان
+                        label += 'an'   # خوبان، خوبانی
                         if kam_dandane:
                             label += 'j1'   # مرتبها
                             label += 'j3'   # مرتبهای
@@ -670,15 +669,15 @@ class Parser:
                                         
                 elif pos == 'adjective_comparative':
                     if word.endswith(PERSIAN_HE):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_YE):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_DETACHED):
@@ -691,7 +690,7 @@ class Parser:
 
                     elif word.endswith(PERSIAN_TA) or \
                          word.endswith(PERSIAN_ZA):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         
                     else:
                         label += 'z1'   # افزونم، افزونت، افزونش، افزونمان، افزونتان، افزونشان
@@ -704,15 +703,15 @@ class Parser:
                         
                 elif pos == 'adjective_superlative':
                     if word.endswith(PERSIAN_HE):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_YE):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         label += ''
 
                     elif word.endswith(PERSIAN_DETACHED):
@@ -725,7 +724,7 @@ class Parser:
                     
                     elif word.endswith(PERSIAN_TA) or \
                          word.endswith(PERSIAN_ZA):
-                        debug('unpredicted case for: ' + word)
+                        debug('unpredicted case for: ' + word + ':' + pos)
                         
                     else:
                         label += 'z1'   # بهترینم، بهترینت، بهترینش، بهترینمان، بهترینتان، بهترینشان
@@ -747,12 +746,11 @@ class Parser:
                 elif pos == 'pronoun':
                     if word.endswith(PERSIAN_HE):
                         if ends_with_aah_uh:
-                            debug('unpredicted case for: ' + word)
+                            debug('unpredicted case for: ' + word + ':' + pos)
                             label += ''
                         elif  ends_with_vowel:
                             label += 'b2'   # آنچه‌ام، آنچه‌ای، آنچه‌ایم، آنچه‌اید، آنچه‌اند
                         else:
-                            debug('unpredicted case for: ' + word)
                             label += ''
 
                     elif word.endswith(PERSIAN_WAW):
