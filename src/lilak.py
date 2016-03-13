@@ -34,7 +34,7 @@ import operator
 import shutil
 import datetime
 
-VERSIAN = '2.0'
+VERSIAN = '2.1'
 DEBUG = 1  # set to 1 to generate a debug output file
 
 ZWNJ          = '\u200C'
