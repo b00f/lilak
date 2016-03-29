@@ -837,7 +837,7 @@ class Parser:
         words_s = sorted(words)
 
         remove('../build/fa_IR.dic')
-        with open('../build/fa_IR.dic', 'w', encoding='utf-8') as f:
+        with open('../build/fa_IR.dic', 'w', encoding='utf-8', newline='') as f:
             f.write('{0}\n'.format(len(words_s)))
             for word in words_s:
                 f.write(word + '\n')
@@ -860,7 +860,7 @@ class Parser:
             affix = f.read()
 
         remove('../build/fa_IR.aff')
-        with open('../build/fa_IR.aff', 'w', encoding='utf-8') as f:
+        with open('../build/fa_IR.aff', 'w', encoding='utf-8', newline='') as f:
             frequency = ''
             for letter in letters_s:
                 frequency += letter[0]
@@ -887,7 +887,7 @@ class Parser:
         dic_delta_s = sorted(dic_delta)
         
         remove('../build/fa_IR.dic_delta')
-        with open('../build/fa_IR.dic_delta', 'w', encoding='utf-8') as f:
+        with open('../build/fa_IR.dic_delta', 'w', encoding='utf-8', newline='') as f:
             for word in dic_delta_s:
                 f.write(word + '\n')
                 
