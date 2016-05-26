@@ -76,7 +76,7 @@ For installing Lilak on OpenOffice just check [here](http://extensions.openoffic
 
 For installing Lilak on Mozilla Firefox just check [here](https://addons.mozilla.org/en-US/firefox/addon/lilak-persian-dictionary/).
 
-For installing Lilak on Google Chrome ... Commiing soon!
+Google Chrome (After version 51) you can active it at chrome://settings/languages
 
 
 ##About the Name
