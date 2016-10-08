@@ -65,16 +65,17 @@ def run_test(filename):
 
 
 
-run_test('text1')
-run_test('text2')
-run_test('text3')
-run_test('text4')
-run_test('text5')
-run_test('text6')
-run_test('text7')
-run_test('text8')
-run_test('text9')
-run_test('text10')
+run_test('../test/text1')
+run_test('../test/text2')
+run_test('../test/text3')
+run_test('../test/text4')
+run_test('../test/text5')
+run_test('../test/text6')
+run_test('../test/text7')
+run_test('../test/text8')
+run_test('../test/text9')
+run_test('../test/text10')
+run_test('../test/verbs')
 
 percentage = ((detected * 100.0) / (detected + not_detected))
 result.write('detected: {0}, not_detected {1}, accuracy {2}\n'.format(detected, not_detected, percentage))
