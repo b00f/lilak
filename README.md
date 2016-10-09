@@ -11,15 +11,15 @@ lilak
   |-- build           : Build folder. 
   |
   |-- src
-  |   |-- lilak.py    : Python script for building lilak dictionary
-  |   |-- lexicon     : Lexicon of Persian words with part-of-speech tags
-  |   |-- affixes     : Affix (prefix or suffix) rules
-  |   |-- dic_users   : List of words without POS tag.
-  |   |-- dic_delta   : List of foreign words in Persian.
-  |   \-- verbs.htm   : List of Persian verbs (unstemmed)
+  |   |-- lilak.py      : Python script for building lilak dictionary
+  |   |-- lilak-test.py : Python script to test lilak accuracy 
+  |   |-- lexicon       : Lexicon of Persian words with part-of-speech tags
+  |   |-- affixes       : Affix (prefix or suffix) rules
+  |   |-- dic_users     : List of words without POS tag.
+  |   |-- dic_delta     : List of foreign words in Persian.
+  |   \-- verbs.htm     : List of Persian verbs (unstemmed)
   |
   |-- test
-  |   |-- dotest.py   : Python script to run all test case files 
   |   |-- text1       : 'Farsi(Persian) is Sugar', A short story by Mohammad-Ali Jamalzadeh
   |   |-- text2       : 'A Hekayat' By Saadi 
   |   |-- text3       : 'A Ghazal' By Hafez 
@@ -29,7 +29,8 @@ lilak
   |   |-- text7       : 'Se Tar' A short story by Jalal Al-e-Ahmad
   |   |-- text8       : 'End of Shahname' By Mehdi Akhavan-Sales
   |   |-- text9       : 'The Water's Footsteps' By Sohrab Sepehri
-  |   \-- text10      : 'Nei Name' By Rumi
+  |   |-- text10      : 'Nei Name' By Rumi
+  |   \-- verbs       : Some inflected verbs
   |
   |-- README.md       : 
   \-- LICENCE         : License file
