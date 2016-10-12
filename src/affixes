@@ -1,20 +1,20 @@
-## 
+##
 ## Lilak, Persian Spell Checking Dictionary
-## 
+##
 ## Copyright 2015 Mostafa Sedaghat Joo
-## 
+##
 ## Licensed under the Apache License, Version 2.0 (the "License");
 ## you may not use this file except in compliance with the License.
 ## You may obtain a copy of the License at
-## 
+##
 ##     http://www.apache.org/licenses/LICENSE-2.0
-## 
+##
 ## Unless required by applicable law or agreed to in writing, software
 ## distributed under the License is distributed on an "AS IS" BASIS,
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
-## 
+##
 ##
 ## For more information check:
 ##  Lilak: https://github.com/m-o-s-t-a-f-a/lilak
@@ -43,178 +43,138 @@ COMPOUNDMIN           1
 
 ## clitics
 
-# ضمیر ملکی متصل
-SFX z1      N        6
-SFX z1      0        م/WW           .
-SFX z1      0        ت/WW           .
-SFX z1      0        ش/WW           .
-SFX z1      0        مان/WW         .
-SFX z1      0        تان/WW         .
-SFX z1      0        شان/WW         .
+SFX sa      N        6
+SFX sa      0        م/FFWW         .
+SFX sa      0        ت/FFWW         .
+SFX sa      0        ش/FFWW         .
+SFX sa      0        مان/FFWW       .
+SFX sa      0        تان/FFWW       .
+SFX sa      0        شان/FFWW       .
 
 
-# ضمیر ملکی متصل
-SFX z2      N        6
-SFX z2      0        یم/FFWW         .
-SFX z2      0        یت/FFWW         .
-SFX z2      0        یش/FFWW         .
-SFX z2      0        یمان/FFWW       .
-SFX z2      0        یتان/FFWW       .
-SFX z2      0        یشان/FFWW       .
+SFX sb      N        6
+SFX sb      0        یم/FFWW        .
+SFX sb      0        یت/FFWW        .
+SFX sb      0        یش/FFWW        .
+SFX sb      0        یمان/FFWW      .
+SFX sb      0        یتان/FFWW      .
+SFX sb      0        یشان/FFWW      .
+
+## with zwnj
+SFX sc      N        6
+SFX sc      0        ‌ام/FFWW       .
+SFX sc      0        ‌ات/FFWW       .
+SFX sc      0        ‌اش/FFWW       .
+SFX sc      0        ‌مان/FFWW      .
+SFX sc      0        ‌تان/FFWW      .
+SFX sc      0        ‌شان/FFWW      .
 
 
-# ضمیر ملکی منفصل
-SFX z3      N        6
-SFX z3      0        ‌ام/FFWW         .
-SFX z3      0        ‌ات/FFWW         .
-SFX z3      0        ‌اش/FFWW         .
-SFX z3      0        ‌مان/FFWW        .
-SFX z3      0        ‌تان/FFWW        .
-SFX z3      0        ‌شان/FFWW        .
+SFX sd      N        3
+SFX sd      0        ها/FFWW        .
+SFX sd      0        های/FFWW       .
+SFX sd      0        هایی/FFWW      .
 
 
-# ضمیر ملکی متصل در حالت جمع
-SFX z4      N        6
-SFX z4      0        هایم/FFWW         .
-SFX z4      0        هایت/FFWW         .
-SFX z4      0        هایش/FFWW         .
-SFX z4      0        هایمان/FFWW       .
-SFX z4      0        هایتان/FFWW       .
-SFX z4      0        هایشان/FFWW       .
+SFX se      N        6
+SFX se      0        هایم/FFWW      .
+SFX se      0        هایت/FFWW      .
+SFX se      0        هایش/FFWW      .
+SFX se      0        هایمان/FFWW    .
+SFX se      0        هایتان/FFWW    .
+SFX se      0        هایشان/FFWW    .
 
-# ضمیر ملکی منفصل در حالت جمع
-SFX z5      N        6
-SFX z5      0        ‌هایم/FFWW         .
-SFX z5      0        ‌هایت/FFWW         .
-SFX z5      0        ‌هایش/FFWW         .
-SFX z5      0        ‌هایمان/FFWW       .
-SFX z5      0        ‌هایتان/FFWW       .
-SFX z5      0        ‌هایشان/FFWW       .
-
-#علامت جمع «ان» متصل
-SFX an      N        2
-SFX an      0        ان/FFWW        .
-SFX an      0        انی/FFWW       .
-
-# علامت جمع «ها» متصل
-SFX j1      N        1
-SFX j1      0        ها/FFWW        .
+SFX sf      N        1
+SFX sf      0        هاست/FFWW      .
 
 
-# علامت جمع «ها» منفصل
-SFX j2      N        1
-SFX j2      0        ‌ها/FFWW         .
+## with zwnj
+SFX sg      N        3
+SFX sg      0        ‌ها/FFWW       .
+SFX sg      0        ‌های/FFWW      .
+SFX sg      0        ‌هایی/FFWW     .
+
+## with zwnj
+SFX sh      N        6
+SFX sh      0        ‌هایم/FFWW     .
+SFX sh      0        ‌هایت/FFWW     .
+SFX sh      0        ‌هایش/FFWW     .
+SFX sh      0        ‌هایمان/FFWW   .
+SFX sh      0        ‌هایتان/FFWW   .
+SFX sh      0        ‌هایشان/FFWW   .
+
+## with zwnj
+SFX si      N        1
+SFX si      0        ‌هاست/FFWW     .
 
 
-# علامت جمع «ها» متصل
-SFX j3      N        1
-SFX j3      0        های/FFWW       .
+SFX sj      N        2
+SFX sj      0        ان/FFWW        .
+SFX sj      0        انی/FFWW       .
 
 
-# علامت جمع «ها» منفصل
-SFX j4      N        1
-SFX j4      0        ‌های/FFWW        .
+SFX sk      N        2
+SFX sk      0        ‌ی/FFWW        .
+SFX sk      0        ٔ/FFWW          .
 
 
-# علامت جمع های نکره متصل
-SFX j5      N        1
-SFX j5      0        هایی/FFWW       .
+SFX sl      N        1
+SFX sl      0        ی/FFWW         .
 
 
-# علامت جمع های نکره منفصل
-SFX j6      N        1
-SFX j6      0        ‌هایی/FFWW       .
+## with zwnj
+SFX sm      N        1
+SFX sm      0        ‌ای/FFWW       .
 
 
-# علامت جمع «ها» متصل
-SFX j7      N        1
-SFX j7      0        هاست/FFWW       .
+SFX sn      N        1
+SFX sn      0        یی/FFWW        .
 
 
-# علامت جمع «ها» منفصل
-SFX j8      N        1
-SFX j8      0        ‌هاست/FFWW         .
+SFX so      N        6
+SFX so      0        م/FFWW         .
+SFX so      0        ی/FFWW         .
+SFX so      0        ست/FFWW        .
+SFX so      0        یم/FFWW        .
+SFX so      0        ید/FFWW        .
+SFX so      0        ند/FFWW        .
 
 
-# نشان همزه
-SFX hz      N        2
-SFX hz      0        ‌ی/FFWW       .
-SFX hz      0        ٔ/FFWW        .
+## with zwnj
+SFX sp      N        5
+SFX sp      0        ‌ام/FFWW       .
+SFX sp      0        ‌ای/FFWW       .
+SFX sp      0        ‌ایم/FFWW      .
+SFX sp      0        ‌اید/FFWW      .
+SFX sp      0        ‌اند/FFWW      .
 
 
-# یای نکره متصل 
-SFX y1      N        1
-SFX y1      0        ی/FFWW          .
+SFX sq      N        6
+SFX sq      0        یم/FFWW        .
+SFX sq      0        یی/FFWW        .
+SFX sq      0        ست/FFWW        .
+SFX sq      0        ییم/FFWW       .
+SFX sq      0        یید/FFWW       .
+SFX sq      0        یند/FFWW       .
 
 
-# یای نکره منفصل
-SFX y2      N        1
-SFX y2      0        ‌ای/FFWW          .
+SFX sr      N        5
+SFX sr      0        م/FFWW         .
+SFX sr      0        ی/FFWW         .
+SFX sr      0        یم/FFWW        .
+SFX sr      0        ید/FFWW        .
+SFX sr      0        ند/FFWW        .
 
 
-# یای نکره متصل
-SFX y3      N        1
-SFX y3      0        یی/FFWW          .
+SFX st      N        2
+SFX st      0        تر/sdsl        .
+SFX st      0        ترین/sg        .
 
 
-## صورت‌هاى متصل فعل «بودن» (ام، اى، است، ایم، اید، اند) در زمان حال
-SFX b1  N        6
-SFX b1  0        م/FFWW          .
-SFX b1  0        ی/FFWW          .
-SFX b1  0        ست/FFWW          .
-SFX b1  0        یم/FFWW          .
-SFX b1  0        ید/FFWW          .
-SFX b1  0        ند/FFWW          .
-
-
-## صورت‌هاى منفصل فعل «بودن» (ام، اى، است، ایم، اید، اند) در زمان حال
-SFX b2  N        5
-SFX b2  0        ‌ام/FFWW          .
-SFX b2  0        ‌ای/FFWW          .
-SFX b2  0        ‌ایم/FFWW          .
-SFX b2  0        ‌اید/FFWW          .
-SFX b2  0        ‌اند/FFWW          .
-
-
-## صورت‌هاى متصل فعل «بودن» (ام، اى، است، ایم، اید، اند) در زمان حال
-SFX b3  N        6
-SFX b3  0        یم/FFWW          .
-SFX b3  0        یی/FFWW          .
-SFX b3  0        ست/FFWW          .
-SFX b3  0        ییم/FFWW         .
-SFX b3  0        یید/FFWW         .
-SFX b3  0        یند/FFWW         .
-
-## صورت‌هاى متصل فعل «بودن» (ام، اى، است، ایم، اید، اند) در زمان حال
-SFX b4  N        5
-SFX b4  0        م/FFWW          .
-SFX b4  0        ی/FFWW          .
-SFX b4  0        یم/FFWW         .
-SFX b4  0        ید/FFWW         .
-SFX b4  0        ند/FFWW         .
-
-## صورت‌هاى منفصل فعل «بودن» (ام، اى) مفرد
-SFX b5  N        2
-SFX b5  0        ‌ام/FFWW          .
-SFX b5  0        ‌ای/FFWW          .
-
-## صورت‌هاى منفصل فعل «بودن» (ایم، اید، اند) جمع
-SFX b6  N        3
-SFX b6  0        ‌ایم/FFWW          .
-SFX b6  0        ‌اید/FFWW          .
-SFX b6  0        ‌اند/FFWW          .
-
-
-# atached Tar & Tarin
-SFX t1  N        2
-SFX t1  0        تر/j1j3y1         .
-SFX t1  0        ترین/j2j4         .
-
-
-# detached Tar & Tarin with zwnj
-SFX t2  N        2
-SFX t2  0        ‌تر/j1j3y1        .
-SFX t2  0        ‌ترین/j2j4        .
+## with zwnj
+SFX su      N        2
+SFX su      0        ‌تر/sdsl       .
+SFX su      0        ‌ترین/sg       .
 
 
 

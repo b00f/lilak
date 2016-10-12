@@ -1,20 +1,20 @@
-## 
+##
 ## Lilak, Persian Spell Checking Dictionary
-## 
+##
 ## Copyright 2015 Mostafa Sedaghat Joo
-## 
+##
 ## Licensed under the Apache License, Version 2.0 (the "License");
 ## you may not use this file except in compliance with the License.
 ## You may obtain a copy of the License at
-## 
+##
 ##     http://www.apache.org/licenses/LICENSE-2.0
-## 
+##
 ## Unless required by applicable law or agreed to in writing, software
 ## distributed under the License is distributed on an "AS IS" BASIS,
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
-## 
+##
 ##
 
 
@@ -33,6 +33,7 @@ import collections
 import operator
 import shutil
 import datetime
+import argparse
 
 VERSIAN = '3.0'
 DEBUG = 1  # set to 1 to generate a debug output file
@@ -65,11 +66,11 @@ PERSIAN_DETACHED = (PERSIAN_WAW, PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_ZAL, \
                     PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE, PERSIAN_HAMZE)
 
 
-def remove(filename):
+def remove_file(filename):
     if os.path.isfile(filename):
         os.remove(filename)
 
- 
+
 def debug(message):
     try:
         if DEBUG:
@@ -77,55 +78,75 @@ def debug(message):
     except:
         pass
 
-def count_dandane(word):
-    dandane = 0;
-    
-    for i, c in enumerate(word):
-    
-        if c == PERSIAN_BE  or \
-           c == PERSIAN_PE  or \
-           c == PERSIAN_TE  or \
-           c == PERSIAN_SE  or \
-           c == PERSIAN_SAD or \
-           c == PERSIAN_ZAD:
-            dandane = dandane + 1
-           
-        if c == PERSIAN_SIN  or \
-           c == PERSIAN_SHIN:
-            dandane = dandane + 3
-           
-        if c == PERSIAN_YE  or \
-           c == PERSIAN_NON:
-            if(i+1 < len(word)):
-                n = word[i+1]
-                
-                if n != ZWNJ:
-                    dandane = dandane + 1
-    
-    return dandane
-    
-class Parser:
-    def __init__(self):
+
+
+
+class Lilak:
+    def __init__(self, mode = 0):
+        self.mode = mode
         self.dictionary = {}
-        
-        
+        self.words = set()
+
+
+    def is_kam_dandane(self, word):
+        if self.mode == 1:
+            return 0
+
+        dandane = 0;
+
+        for i, c in enumerate(word):
+
+            if c == PERSIAN_BE  or \
+               c == PERSIAN_PE  or \
+               c == PERSIAN_TE  or \
+               c == PERSIAN_SE  or \
+               c == PERSIAN_SAD or \
+               c == PERSIAN_ZAD:
+                dandane = dandane + 1
+
+            if c == PERSIAN_SIN  or \
+               c == PERSIAN_SHIN:
+                dandane = dandane + 3
+
+            if c == PERSIAN_YE  or \
+               c == PERSIAN_NON:
+                if(i+1 < len(word)):
+                    n = word[i+1]
+
+                    if n != ZWNJ:
+                        dandane = dandane + 1
+
+        return (dandane < 5)
+
+
     def read_lexicon(self, filename):
+        debug('read lexicon')
+
+        if not os.path.isfile(filename):
+            debug('file does not exist: %s' % filename)
+            return
+
         with open(filename, 'r', encoding='utf-8') as f:
             for line in f.readlines():
-                if line.startswith('#'):
+                if line.startswith('##'):
                     continue
 
                 tags = line[:-1].split(',')  # remove line breaks, split it
 
                 # attributes: (pos, offensive, ends_with_vowel, ends_with_aah_uh)
                 word = tags[0].strip()
-                attrs = (tags[1], tags[2], tags[3], tags[4])
+                attrs = tags[1:]
 
                 if not word:
+                    debug('Wrong entry: {0}.'.format(line[:-1]))
                     continue
 
                 if ' ' in word:
-                    continue  # hunspell doesn't work with compound words.
+                    debug('Wrong entry: {0}.'.format(line[:-1]))
+                    continue
+
+                if word.startswith('u'):
+                    word = chr(int(word[1:]))
 
                 if word not in self.dictionary:
                     self.dictionary[word] = []
@@ -136,665 +157,35 @@ class Parser:
                     debug('{0} is duplicated.'.format(line[:-1]))
 
 
+    def pars_user_dic(self, filename):
+        debug('pars user dic')
 
-    def pars(self):
-        words = set()
-        for key, value in self.dictionary.items():
-            for attrs in value:
-                word = key
-                pos = attrs[0]
-                offensive = attrs[1]
-                ends_with_vowel = attrs[2]
-                ends_with_aah_uh = attrs[3]
-                label = ''
-                kam_dandane = count_dandane(word) < 5
-
-        ###############################################################################################
-        # VERB                                                                                        #
-        ###############################################################################################
-                if pos.startswith('verb') :
-                    label += ''
-                
-
-        #################################################################################################
-        # NOUN                                                                                          #
-        #################################################################################################
-                elif pos == 'noun_common_singular': 
-                    if word.endswith(PERSIAN_HE):
-                        if ends_with_aah_uh:
-                            label += 'z1'   # نگاهم، نگاهت، نگاهش، نگاهمان، نگاهتان، نگاهشان
-                                            # کوهم، کوهت، کوهش، کوهمان، کوهتان، کوهشان
-                            label += 'b4'   # نگاهم، نگاهی، نگاهیم، نگاهید، نگاهند
-                                            # کوهم، کوهی، کوهیم، کوهید، کوهند
-                            label += 'z5'   # نگاه‌هایم، نگاه‌هایت، نگاه‌هایش، نگاه‌هایمان، نگاه‌هایتان، نگاه‌هایشان
-                                            # کوه‌هایم، کوه‌هایت، کوه‌هایش، کوه‌هایمان، کوه‌هایتان، کوه‌هایشان
-                            label += 'j2'   # نگاه‌ها، کوه‌ها
-                            label += 'j4'   # نگاه‌های، کوه‌های
-                            label += 'j6'   # نگاه‌هایی، کوه‌هایی
-                            label += 'j8'   # نگاه‌هاست، کوه‌هاست
-                            label += 'y1'   # نگاهی، کوهی
-                            if kam_dandane:
-                                label += 'j1'   # نگاهها، کوهها
-                        elif  ends_with_vowel:
-                            label += 'z3'   # خانه‌ام، خانه‌ات، خانه‌اش، خانه‌مان، خانه‌تان، خانه‌شان
-                            label += 'b2'   # خانه‌ام، خانه‌ای، خانه‌ایم، خانه‌اید، خانه‌اند
-                            label += 'z5'   # خانه‌هایم، خانه‌هایت، خانه‌هایش، خانه‌هایمان، خانه‌هایتان، خانه‌هایشان
-                            label += 'j2'   # خانه‌ها
-                            label += 'j4'   # خانه‌های
-                            label += 'j6'   # خانه‌هایی
-                            label += 'j8'   # خانه‌هاست
-                            label += 'y2'   # خانه‌ای
-                            label += 'hz'   # خانه‌ی، خانهٔ
-                        else:
-                            label += 'z3'   # روبه‌ام، روبه‌ات، روبه‌اش، روبه‌مان، روبه‌تان، روبه‌شان
-                            label += 'b2'   # روبه‌ام، روبه‌ای، روبه‌ایم، روبه‌اید، روبه‌اند
-                            label += 'z5'   # روبه‌هایم، روبه‌هایت، روبه‌هایش، روبه‌هایمان، روبه‌هایتان، روبه‌هایشان
-                            label += 'j2'   # روبه‌ها
-                            label += 'j4'   # روبه‌های
-                            label += 'j6'   # روبه‌هایی
-                            label += 'j8'   # روبه‌هاست
-                            label += 'y1'   # روبهی
-
-                    elif word.endswith(PERSIAN_WAW): 
-                        if ends_with_vowel:
-                            label += 'z2'   # عمویم، عمویت، عمویش، عمویمان، عمویتان، عمویشان
-                            label += 'b3'   # عمویم، عمویی، عموست، عموییم، عمویید، عمویند
-                            label += 'z4'   # عموهایم، عموهایت، عموهایش، عموهایمان، عموهایتان، عموهایشان
-                            label += 'j1'   # عموها
-                            label += 'j3'   # عموهای
-                            label += 'j5'   # عموهایی
-                            label += 'j7'   # عموهاست
-                            label += 'y1'   # عموی
-                            label += 'y3'   # عمویی
-                        else:
-                            label += 'z1'   # رهروم، رهروت، رهروش، رهرومان، رهروتان، رهروشان
-                                            ## [???] ambiguous here: شما کارمند متروید/مترواید/مترویید
-                            label += 'b4'   # رهروم، رهروی، رهرویم، رهروید، رهروند
-                            label += 'z4'   # رهروهایم، رهروهایت، رهروهایش، رهروهایمان، رهروهایتان، رهروهایشان
-                            label += 'j1'   # رهروها
-                            label += 'j3'   # رهروهای
-                            label += 'j5'   # رهروهایی
-                            label += 'j7'   # رهروهاست
-                            label += 'y1'   # رهروی
-                            label += 'an'   # رهروان، رهروانی
-
-                    elif word.endswith(PERSIAN_YE):
-                        label += 'z3'   # کشتی‌ام، کشتی‌ات، کشتی‌اش، کشتی‌مان، کشتی‌تان، کشتی‌شان
-                        label += 'b2'   # کشتی‌ام، کشتی‌ای، کشتی‌ایم، کشتی‌اید، کشتی‌اند
-                        label += 'z5'   # کشتی‌هایم، کشتی‌هایت، کشتی‌هایش، کشتی‌هایمان، کشتی‌هایتان، کشتی‌هایشان
-                        label += 'j2'   # کشتی‌ها
-                        label += 'j4'   # کشتی‌های
-                        label += 'j6'   # کشتی‌هایی
-                        label += 'j8'   # کشتی‌هاست
-                        label += 'y2'   # کشتی‌ای
-                        label += 'an'   # شکارچیان، شکارچیانی
-
-                    elif word.endswith(PERSIAN_ALEF):
-                        label += 'z2'   # پایم، پایت، پایش، پایمان، پایتان، پایشان
-                        label += 'b3'   # پایم، پایی، پاست، پاییم، پایید، پایند
-                        label += 'z4'   # پاهایم، پاهایت، پاهایش، پاهایمان، پاهایتان، پاهایشان
-                        label += 'j1'   # پاها
-                        label += 'j3'   # پاهای
-                        label += 'j5'   # پاهایی
-                        label += 'j7'   # پاهاست
-                        label += 'y1'   # پای
-                        label += 'y3'   # پایی
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # برادرم، برادرت، برادرش، برادرمان، برادرتان، برادرشان
-                        label += 'b1'   # برادرم، برادری، برادرست، برادریم، برادرید، برادرند
-                        label += 'z4'   # برادرهایم، برادرهایت، برادرهایش، برادرهایمان، برادرهایتان، برادرهایشان
-                        label += 'j1'   # برادرها
-                        label += 'j3'   # برادرهای
-                        label += 'j5'   # برادرهایی
-                        label += 'j7'   # برادرهاست
-                        label += 'y1'   # برادری
-                        label += 'an'   # برادران، برادرانی
-                        
-                    elif word.endswith(PERSIAN_TA) or \
-                         word.endswith(PERSIAN_ZA):
-                        label += 'z1'   # خطم، خطت، خطش، خطمان، خطتان، خطشان
-                        label += 'b1'   # خطم، خطی، خطست، خطیم، خطید، خطند
-                        label += 'z5'   # خط‌هایم، خط‌هایت، خط‌هایش، خط‌هایمان، خط‌هایتان، خط‌هایشان
-                        label += 'j2'   # خط‌ها
-                        label += 'j4'   # خط‌های
-                        label += 'j6'   # خط‌هایی
-                        label += 'j8'   # خط‌هاست
-                        label += 'y1'   # خطی
-                        label += 'an'   # خیاطان، خیاطانی
-                    
-                    else:
-                        label += 'z1'   # کتابم، کتابت، کتابش، کتابمان، کتابتان، کتابشان
-                        label += 'b1'   # کتابم، کتابی، کتابست، کتابیم، کتابید، کتابند
-                        label += 'z5'   # کتاب‌هایم، کتاب‌هایت، کتاب‌هایش، کتاب‌هایمان، کتاب‌هایتان، کتاب‌هایشان                        
-                        label += 'j2'   # کتاب‌ها
-                        label += 'j4'   # کتاب‌های
-                        label += 'j6'   # کتاب‌هایی
-                        label += 'j8'   # کتاب‌هاست
-                        label += 'y1'   # کتابی
-                        label += 'an'   # صاحبان، صاحبانی
-                        if kam_dandane:
-                            label += 'z4'   # کتابهایم، کتابهایت، کتابهایش، کتابهایمان، کتابهایتان، کتابهایشان
-                            label += 'j1'   # کتابها
-                            label += 'j3'   # کتابهای
-                            label += 'j5'   # کتابهایی
-                            label += 'j7'   # کتابهاست
-
-                elif pos == 'noun_common_plural':
-                    if word.endswith(PERSIAN_HE):
-                        if ends_with_aah_uh:
-                            label += ''     # وجوه
-                        elif  ends_with_vowel:
-                            label += 'z3'   # فلاسفه‌ام، فلاسفه‌ات، فلاسفه‌اش، فلاسفه‌مان، فلاسفه‌تان، فلاسفه‌شان
-                            label += 'b2'   # فلاسفه‌ام، فلاسفه‌ای، فلاسفه‌ایم، فلاسفه‌اید، فلاسفه‌اند
-                            label += 'hz'   # فلاسفه‌ی، فلاسفهٔ
-                            label += 'y2'   # فلاسفه‌ای
-                        else:
-                            label += ''     # اشربه
-                            
-                    elif word.endswith(PERSIAN_YE):
-                        label += 'z3'   # فتاوی‌ام، فتاوی‌ات، فتاوی‌اش، فتاوی‌مان، فتاوی‌تان، فتاوی‌شان
-                        label += 'b2'   # فتاوی‌ام، فتاوی‌ای، فتاوی‌ایم، فتاوی‌اید، فتاوی‌اند
-                        label += 'y2'   # فتاوی‌ای
-                        
-                    elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-                        
-                    elif word.endswith(PERSIAN_ALEF):
-                        label += 'z2'   # هدایایم، هدایایت، هدایایش، هدایایمان، هدایایتان، هدایایشان
-                        label += 'b3'   # هدایایم، هدایایی، هدایاست، هدایاییم، هدایایید، هدایایند
-                        label += 'y1'   # هدایای
-                        label += 'y3'   # هدایایی
-                        
-                    elif word.endswith(PERSIAN_TA) or \
-                         word.endswith(PERSIAN_ZA):
-                        label += 'z1'   # اقساطم، اقساطت، اقساطش، اقساطمان، اقساطتان، اقساطشان
-                        label += 'b1'   # اقساطم، اقساطی، اقساطست، اقساطیم، اقساطید، اقساطند
-                        label += 'y1'   # اقساطی
-                        # label += 'an'   # [???]
-                        
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # آثارم، آثارت، آثارش، آثارمان، آثارتان، آثارشان
-                        label += 'b1'   # آثارم، آثاری، آثارست، آثاریم، آثارید، آثارند
-                        label += 'y1'   # آثاری
-                        
-                    else:
-                        label += 'z1'   # احزابم، احزابت، احزابش، احزابمان، احزابتان، احزابشان
-                        label += 'b1'   # احزابم، احزابی، احزابست، احزابیم، احزابید، احزابند
-                        label += 'y1'   # احزابی
-
-                elif pos == 'noun_proper_singular':
-                    if word.endswith(PERSIAN_HE):
-                        if ends_with_aah_uh:
-                            label += 'z1'   # کرمانشاهم، کرمانشاهت، کرمانشاهش، کرمانشاهمان، کرمانشاهتان، کرمانشاهشان
-                            label += 'b4'   # کرمانشاهم، کرمانشاهی، کرمانشاهیم، کرمانشاهید، کرمانشاهند
-                            label += 'z5'   # کرمانشاه‌هایم، کرمانشاه‌هایت، کرمانشاه‌هایش، کرمانشاه‌هایمان، کرمانشاه‌هایتان، کرمانشاه‌هایشان
-                            label += 'j2'   # کرمانشاه‌ها
-                            label += 'j4'   # کرمانشاه‌های
-                            label += 'j6'   # کرمانشاه‌هایی
-                            label += 'j8'   # کرمانشاه‌هاست
-                            label += 'y1'   # کرمانشاهی
-                        elif  ends_with_vowel:
-                            label += 'z3'   # آباده‌ام، آباده‌ات، آباده‌اش، آباده‌مان، آباده‌تان، آباده‌شان
-                            label += 'b2'   # آباده‌ام، آباده‌ای، آباده‌ایم، آباده‌اید، آباده‌اند
-                            label += 'z5'   # آباده‌هایم، آباده‌هایت، آباده‌هایش، آباده‌هایمان، آباده‌هایتان، آباده‌هایشان
-                            label += 'j2'   # آباده‌ها
-                            label += 'j4'   # آباده‌های
-                            label += 'j6'   # آباده‌هایی
-                            label += 'j8'   # آباده‌هاست
-                            label += 'y2'   # آباده‌ای
-                            label += 'hz'   # آباده‌ی، آبادهٔ
-                        else:
-                                            # [???] 
-                                            # عبده -> abdoh 
-                            label += 'z3'   # عبده‌ام، عبده‌ات، عبده‌اش، عبده‌مان، عبده‌تان، عبده‌شان
-                            label += 'b2'   # عبده‌ام، عبده‌ای، عبده‌ایم، عبده‌اید، عبده‌اند
-                            label += 'z5'   # عبده‌هایم، عبده‌هایت، عبده‌هایش، عبده‌هایمان، عبده‌هایتان، عبده‌هایشان
-                            label += 'j2'   # عبده‌ها
-                            label += 'j4'   # عبده‌های
-                            label += 'j6'   # عبده‌هایی
-                            label += 'j8'   # عبده‌هاست
-                            label += 'y2'   # عبده‌ای
-
-                    elif word.endswith(PERSIAN_WAW):
-                        if ends_with_vowel:
-                            label += 'z2'   # باکویم، باکویت، باکویش، باکویمان، باکویتان، باکویشان
-                            label += 'b3'   # باکویم، باکویی، باکوست، باکوییم، باکویید، باکویند
-                            label += 'z4'   # باکوهایم، باکوهایت، باکوهایش، باکوهایمان، باکوهایتان، باکوهایشان
-                            label += 'j1'   # باکوها
-                            label += 'j3'   # باکوهای
-                            label += 'j5'   # باکوهایی
-                            label += 'j7'   # باکوهاست
-                            label += 'y1'   # باکوی
-                            label += 'y3'   # باکویی
-                        else:
-                            label += 'z1'   # آپولوم، آپولوت، آپولوش، آپولومان، آپولوتان، آپولوشان
-                            label += 'b4'   # آپولوم، آپولوی، آپولویم، آپولوید، آپولوند
-                            label += 'z4'   # آپولوهایم، آپولوهایت، آپولوهایش، آپولوهایمان، آپولوهایتان، آپولوهایشان
-                            label += 'j1'   # آپولوها
-                            label += 'j3'   # آپولوهای
-                            label += 'j5'   # آپولوهایی
-                            label += 'j7'   # آپولوهاست
-                            label += 'y1'   # آپولوی
-
-                    elif word.endswith(PERSIAN_YE):
-                        label += 'z3'   # آبادانی‌ام، آبادانی‌ات، آبادانی‌اش، آبادانی‌مان، آبادانی‌تان، آبادانی‌شان
-                        label += 'b2'   # آبادانی‌ام، آبادانی‌ای، آبادانی‌ایم، آبادانی‌اید، آبادانی‌اند
-                        label += 'z5'   # آبادانی‌هایم، آبادانی‌هایت، آبادانی‌هایش، آبادانی‌هایمان، آبادانی‌هایتان، آبادانی‌هایشان
-                        label += 'j2'   # آبادانی‌ها
-                        label += 'j4'   # آبادانی‌های
-                        label += 'j6'   # آبادانی‌هایی
-                        label += 'j8'   # آبادانی‌هاست
-                        label += 'y2'   # آبادانی‌ای
-
-                    elif word.endswith(PERSIAN_ALEF):
-                        label += 'z2'   # آپادانایم، آپادانایت، آپادانایش، آپادانایمان، آپادانایتان، آپادانایشان
-                        label += 'b3'   # آپادانایم، آپادانایی، آپاداناست، آپاداناییم، آپادانایید، آپادانایند
-                        label += 'z4'   # آپاداناهایم، آپاداناهایت، آپاداناهایش، آپاداناهایمان، آپاداناهایتان، آپاداناهایشان
-                        label += 'j1'   # آپاداناها
-                        label += 'j3'   # آپاداناهای
-                        label += 'j5'   # آپاداناهایی
-                        label += 'j7'   # آپاداناهاست
-                        label += 'y1'   # آپادانای
-                        label += 'y3'   # آپادانایی
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # البرزم، البرزت، البرزش، البرزمان، البرزتان، البرزشان
-                        label += 'b1'   # البرزم، البرزی، البرزست، البرزیم، البرزید، البرزند
-                        label += 'z4'   # البرزهایم، البرزهایت، البرزهایش، البرزهایمان، البرزهایتان، البرزهایشان
-                        label += 'j1'   # البرزها
-                        label += 'j3'   # البرزهای
-                        label += 'j5'   # البرزهایی
-                        label += 'j7'   # البرزهاست
-                        label += 'y1'   # البرزی
-
-                    elif word.endswith(PERSIAN_TA) or \
-                         word.endswith(PERSIAN_ZA):
-                        label += 'z1'   # بقراطم، بقراطت، بقراطش، بقراطمان، بقراطتان، بقراطشان
-                        label += 'b1'   # بقراطم، بقراطی، بقراطست، بقراطیم، بقراطید، بقراطند
-                        label += 'z5'   # بقراط‌هایم، بقراط‌هایت، بقراط‌هایش، بقراط‌هایمان، بقراط‌هایتان، بقراط‌هایشان
-                        label += 'j2'   # بقراط‌ها
-                        label += 'j4'   # بقراط‌های
-                        label += 'j6'   # بقراط‌هایی
-                        label += 'j8'   # بقراط‌هاست
-                        label += 'y1'   # بقراطی
-                        # label += 'an'   # [???]
-                        
-                    else:
-                        label += 'z1'   # بنابم، بنابت، بنابش، بنابمان، بنابتان، بنابشان
-                        label += 'b1'   # بنابم، بنابی، بنابست، بنابیم، بنابید، بنابند
-                        label += 'z5'   # بناب‌هایم، بناب‌هایت، بناب‌هایش، بناب‌هایمان، بناب‌هایتان، بناب‌هایشان
-                        label += 'j2'   # بناب‌ها
-                        label += 'j4'   # بناب‌های
-                        label += 'j6'   # بناب‌هایی
-                        label += 'j8'   # بناب‌هاست
-                        label += 'y1'   # بنابی
-
-                elif pos == 'noun_proper_plural':
-                    if word.endswith(PERSIAN_HE):
-                        if ends_with_aah_uh:
-                            debug('unpredicted case for: ' + word + ':' + pos)
-                        elif  ends_with_vowel:
-                            label += 'z3'   # ارامنه‌ام، ارامنه‌ات، ارامنه‌اش، ارامنه‌مان، ارامنه‌تان، ارامنه‌شان
-                            label += 'b2'   # ارامنه‌ام، ارامنه‌ای، ارامنه‌ایم، ارامنه‌اید، ارامنه‌اند
-                            label += 'hz'   # ارامنه‌ی، ارامنهٔ
-                            label += 'y2'   # ارامنه‌ای
-                        else:
-                            debug('unpredicted case for: ' + word + ':' + pos)
-
-                    elif word.endswith(PERSIAN_YE):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_ALEF):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # عادم، عادت، عادش، عادمان، عادتان، عادشان
-                        label += 'b1'   # عادم، عادی، عادست، عادیم، عادید، عادند
-                        label += 'y1'   # عادی
-                    
-                    elif word.endswith(PERSIAN_TA) or \
-                         word.endswith(PERSIAN_ZA):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-                        
-                    else:
-                        label += 'z1'   # اماراتم، اماراتت، اماراتش، اماراتمان، اماراتتان، اماراتشان
-                        label += 'b1'   # اماراتم، اماراتی، اماراتست، اماراتیم، اماراتید، اماراتند
-                        label += 'y1'   # اماراتی
-
-        #################################################################################################
-        # ADJECTIVE                                                                                     #
-        #################################################################################################
-                elif pos == 'adjective_positive':
-                    if word.endswith(PERSIAN_HE):
-                        if ends_with_aah_uh:
-                            label += 'z1'   # کوتاهم، کوتاهت، کوتاهش، کوتاهمان، کوتاهتان، کوتاهشان
-                                            # باشکوهم، باشکوهت، باشکوهش، باشکوهمان، باشکوهتان، باشکوهشان
-                            label += 'b4'   # کوتاهم، کوتاهی، کوتاهیم، کوتاهید، کوتاهند
-                                            # باشکوهم، باشکوهی، باشکوهیم، باشکوهید، باشکوهند
-                            label += 'y1'   # کوتاهی، باشکوهی
-                            label += 'j2'   # کوتاه‌ها، باشکوه‌ها
-                            label += 'j4'   # کوتاه‌های، باشکوه‌های
-                            label += 'j8'   # کوتاه‌هاست، باشکوه‌هاست
-                            label += 't2'   # کوتاه‌تر، کوتاه‌ترین
-                                            # باشکوه‌تر، باشکوه‌ترین
-                                            # کوتاه‌تری، باشکوه‌تری
-                                            # کوتاه‌ترها، کوتاه‌ترهای
-                                            # باشکوه‌ترها، باشکوه‌ترهای
-                                            # کوتاه‌ترین‌ها، کوتاه‌ترین‌های
-                                            # باشکوه‌ترین‌ها، باشکوه‌ترین‌های
-                        elif ends_with_vowel:
-                            label += 'z3'   # شایسته‌ام، شایسته‌ات، شایسته‌اش، شایسته‌مان، شایسته‌تان، شایسته‌شان
-                            label += 'b2'   # شایسته‌ام، شایسته‌ای، شایسته‌ایم، شایسته‌اید، شایسته‌اند
-                            label += 'hz'   # شایسته‌ی، شایستهٔ
-                            label += 'j2'   # شایسته‌ها
-                            label += 'j4'   # شایسته‌های
-                            label += 'j8'   # شایسته‌هاست
-                            label += 't2'   # شایسته‌تر، شایسته‌ترین
-                                            # شایسته‌تری
-                                            # شایسته‌ترها، شایسته‌ترهای
-                                            # شایسته‌ترین‌ها، شایسته‌ترین‌های
-                        else:
-                            label += 'z3'   # کوته‌ام، کوته‌ات، کوته‌اش، کوته‌مان، کوته‌تان، کوته‌شان
-                            label += 'b2'   # کوته‌ام، کوته‌ای، کوته‌ایم، کوته‌اید، کوته‌اند
-                            label += 'y1'   # کوتهی
-                            label += 'j2'   # کوته‌ها
-                            label += 'j4'   # کوته‌های
-                            label += 'j8'   # کوته‌هاست
-                            label += 't2'   # کوته‌تر، کوته‌ترین
-                                            # کوته‌تری
-                                            # کوته‌ترها، کوته‌ترهای
-                                            # کوته‌ترین‌ها، کوته‌ترین‌های
-
-                    elif word.endswith(PERSIAN_WAW):
-                        if ends_with_vowel:
-                            label += 'z2'   # پررویم، پررویت، پررویش، پررویمان، پررویتان، پررویشان
-                            label += 'b3'   # پررویم، پررویی، پرروست، پرروییم، پررویید، پررویند
-                            label += 'y1'   # پرروی
-                            label += 'y3'   # پررویی
-                            label += 'j1'   # پرروها
-                            label += 'j3'   # پرروهای
-                            label += 'j7'   # پرروهاست
-                            label += 't1'   # پرروتر، پرروترین
-                                            # پرروتری
-                                            # پرروترها، پرروترهای
-                                            # پرروترین‌ها، پرروترین‌های
-                        else:
-                            label += 'z1'   # کنجکاوم، کنجکاوت، کنجکاوش، کنجکاومان، کنجکاوتان، کنجکاوشان
-                            label += 'b4'   # کنجکاوم، کنجکاوی، کنجکاویم، کنجکاوید، کنجکاوند
-                            label += 'y1'   # کنجکاوی
-                            label += 'j1'   # کنجکاوها
-                            label += 'j3'   # کنجکاوهای
-                            label += 'j7'   # کنجکاوهاست
-                            label += 't1'   # کنجکاوتر، کنجکاوترین
-                                            # کنجکاوتری
-                                            # کنجکاوترها، کنجکاوترهای
-                                            # کنجکاوترین‌ها، کنجکاوترین‌های
-                            label += 'an'   # کنجکاوان، کنجکاوانی
-
-                    elif word.endswith(PERSIAN_YE):
-                        label += 'z3'   # عالی‌ام، عالی‌ات، عالی‌اش، عالی‌مان، عالی‌تان، عالی‌شان
-                        label += 'b2'   # عالی‌ام، عالی‌ای، عالی‌ایم، عالی‌اید، عالی‌اند
-                        label += 'y2'   # عالی‌ای
-                        label += 'j2'   # عالی‌ها
-                        label += 'j4'   # عالی‌های
-                        label += 'j8'   # عالی‌هاست
-                        label += 't2'   # عالی‌تر، عالی‌ترین
-                                        # عالی‌تری
-                                        # عالی‌ترها، عالی‌ترهای
-                                        # عالی‌ترین‌ها، عالی‌ترین‌های
-
-                    elif word.endswith(PERSIAN_ALEF):
-                        label += 'z2'   # اعلایم، اعلایت، اعلایش، اعلایمان، اعلایتان، اعلایشان
-                        label += 'b3'   # اعلایم، اعلایی، اعلاست، اعلاییم، اعلایید، اعلایند
-                        label += 'y1'   # اعلای
-                        label += 'y3'   # اعلایی
-                        label += 'j1'   # اعلاها
-                        label += 'j3'   # اعلاهای
-                        label += 'j7'   # اعلاهاست
-                        label += 't1'   # اعلاتر، اعلاترین
-                                        # اعلاتری
-                                        # اعلاترها، اعلاترهای
-                                        # اعلاترین‌ها، اعلاترین‌های
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # آبادم، آبادت، آبادش، آبادمان، آبادتان، آبادشان
-                        label += 'b1'   # آبادم، آبادی، آبادست، آبادیم، آبادید، آبادند
-                        label += 'y1'   # آبادی
-                        label += 'j1'   # آبادها
-                        label += 'j3'   # آبادهای
-                        label += 'j7'   # آبادهاست
-                        label += 't1'   # آبادتر، آبادترین
-                                        # آبادتری
-                                        # آبادترها، آبادترهای
-                                        # آبادترین‌ها، آبادترین‌های
-                        label += 'an'   # آبادان، تنومندان، آبادانی، تنومندانی
-                    
-                    elif word.endswith(PERSIAN_TA) or \
-                         word.endswith(PERSIAN_ZA):
-                        label += 'z1'   # بانشاطم، بانشاطت، بانشاطش، بانشاطمان، بانشاطتان، بانشاطشان
-                        label += 'b1'   # بانشاطم، بانشاطی، بانشاطست، بانشاطیم، بانشاطید، بانشاطند
-                        label += 'y1'   # بانشاطی
-                        label += 'j2'   # بانشاط‌ها
-                        label += 'j4'   # بانشاط‌های
-                        label += 'j8'   # بانشاط‌هاست
-                        label += 't1'   # بانشاطتر، بانشاطترین
-                                        # بانشاطتری
-                                        # بانشاطترها، بانشاطترهای
-                                        # بانشاطترین‌ها، بانشاطترین‌های
-                        label += 't2'   # بانشاط‌تر، بانشاط‌ترین
-                                        # بانشاط‌تری
-                                        # بانشاط‌ترها، بانشاط‌ترهای
-                                        # بانشاط‌ترین‌ها، بانشاط‌ترین‌های
-                        label += 'an'   # بانشاطان، بانشاطانی
-                        
-                    else:
-                        label += 'z1'   # مرتبم، مرتبت، مرتبش، مرتبمان، مرتبتان، مرتبشان
-                        label += 'b1'   # مرتبم، مرتبی، مرتبست، مرتبیم، مرتبید، مرتبند
-                        label += 'y1'   # مرتبی
-                        label += 'j2'   # مرتب‌ها
-                        label += 'j4'   # مرتب‌های
-                        label += 'j8'   # مرتب‌هاست
-                        label += 't2'   # مرتب‌تر، مرتب‌ترین
-                                        # مرتب‌تری
-                                        # مرتب‌ترها، مرتب‌ترهای
-                                        # مرتب‌ترین‌ها، مرتب‌ترین‌های
-                        label += 'an'   # خوبان، خوبانی
-                        if kam_dandane:
-                            label += 'j1'   # مرتبها
-                            label += 'j3'   # مرتبهای
-                            label += 'j7'   # مرتبهاست
-                            label += 't1'   # مرتبتر، مرتبترین
-                                            # مرتبتری
-                                            # مرتبترها، مرتبترهای
-                                            # مرتبترین‌ها، مرتبترین‌های
-                                        
-                elif pos == 'adjective_comparative':
-                    if word.endswith(PERSIAN_HE):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_YE):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # ارشدم، ارشدت، ارشدش، ارشدمان، ارشدتان، ارشدشان
-                        label += 'b1'   # ارشدم، ارشدی، ارشدست، ارشدیم، ارشدید، ارشدند
-                        label += 'y1'   # ارشدی
-                        label += 'j1'   # ارشدها
-                        label += 'j3'   # ارشدهای
-                        label += 'j7'   # ارشدهاست
-
-                    elif word.endswith(PERSIAN_TA) or \
-                         word.endswith(PERSIAN_ZA):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        
-                    else:
-                        label += 'z1'   # افزونم، افزونت، افزونش، افزونمان، افزونتان، افزونشان
-                        label += 'b1'   # افزونم، افزونی، افزونست، افزونیم، افزونید، افزونند
-                        label += 'y1'   # افزونی
-                        label += 'j2'   # افزون‌ها
-                        label += 'j4'   # افزون‌های
-                        ## label += 'j8'   # [???] افزون‌هاست 
-
-                        
-                elif pos == 'adjective_superlative':
-                    if word.endswith(PERSIAN_HE):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_WAW):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_YE):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'z1'   # اولی‌ترم، اولی‌ترت، اولی‌ترش، اولی‌ترمان، اولی‌ترتان، اولی‌ترشان
-                        label += 'b1'   # اولی‌ترم، اولی‌تری، اولی‌ترست، اولی‌تریم، اولی‌ترید، اولی‌ترند
-                        label += 'y1'   # اولی‌تری
-                        label += 'j1'   # اولی‌ترها
-                        label += 'j3'   # اولی‌ترهای
-                        label += 'j7'   # اولی‌ترهاست
-                    
-                    elif word.endswith(PERSIAN_TA) or \
-                         word.endswith(PERSIAN_ZA):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        
-                    else:
-                        label += 'z1'   # بهترینم، بهترینت، بهترینش، بهترینمان، بهترینتان، بهترینشان
-                        label += 'b1'   # بهترینم، بهترینی، بهترینست، بهترینیم، بهترینید، بهترینند
-                        label += 'y1'   # بهترینی
-                        label += 'j2'   # بهترین‌ها
-                        label += 'j4'   # بهترین‌های
-                        label += 'j8'   # بهترین‌هاست
-
-        #################################################################################################
-        # ADVERB                                                                                        #
-        #################################################################################################
-                elif pos == 'adverb':
-                    label += ''
-
-        #################################################################################################
-        # PRONOUN                                                                                       #
-        #################################################################################################
-                elif pos == 'pronoun':
-                    if word.endswith(PERSIAN_HE):
-                        if ends_with_aah_uh:
-                            debug('unpredicted case for: ' + word + ':' + pos)
-                            label += ''
-                        elif  ends_with_vowel:
-                            label += 'b2'   # آنچه‌ام، آنچه‌ای، آنچه‌ایم، آنچه‌اید، آنچه‌اند
-                        else:
-                            label += ''
-
-                    elif word.endswith(PERSIAN_WAW):
-                        if ends_with_vowel:
-                            label += 'b3'   # همویم، همویی، هموست، هموییم، همویید، همویند 
-                        else:
-                            label += ''     # تو
-
-                    elif word.endswith(PERSIAN_YE):
-                        ### label += 'z1'   # [???]  بعضی‌مان، بعضی‌تان، بعضی‌شان
-                        label += 'b2'   # چی‌ام، چی‌ای، چی‌ایم، چی‌اید، چی‌اند
-
-                    elif word.endswith(PERSIAN_ALEF):
-                        label += 'b3'   # آنهایم، آنهایی، آنهاست، آنهاییم، آنهایید، آنهایند
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'b1'   # دگرم، دگری، دگرست، دگریم، دگرید، دگرند
-
-                    else:
-                        label += 'b1'   # آنم، آنی، آنست، آنیم، آنید، آنند
-
-        #################################################################################################
-        # NUMBER                                                                                        #
-        #################################################################################################
-                elif pos == 'number':
-                    label += ''
-
-        #################################################################################################
-        # NEDA                                                                                          #
-        #################################################################################################
-                elif pos == 'neda':
-                    label += ''
-
-        #################################################################################################
-        # PREPOSITION                                                                                   #
-        #################################################################################################
-                elif pos == 'preposition':
-                    label += ''
-
-        #################################################################################################
-        # CONJUNCTION                                                                                   #
-        #################################################################################################
-                elif pos == 'conjunction':
-                    label += ''
-
-        #################################################################################################
-        # ARABIC                                                                                        #
-        #################################################################################################
-                elif pos == 'arabic':
-                    if word.endswith(PERSIAN_HE):
-                        label += ''
-
-                    else:
-                        label += 'y1'   # طرفة‌العینی
-
-                else:
-                    debug('{0} {1}: unknown tag'.format(word, pos))
-
-                # offensive word
-                if offensive:
-                    label += '!!'
-
-                if label:
-                    words.add(word+'/'+label)
-                else:
-                    words.add(word)
+        if not os.path.isfile(filename):
+            debug('file does not exist: %s' % filename)
+            return
 
         # import user dictionary
-        with open('dic_users', 'r', encoding='utf-8') as f:
+        with open(filename, 'r', encoding='utf-8') as f:
             for line in f.readlines():
                 word = line[:-1].strip()
 
                 if word.startswith('#'):
                     continue
-                    
+
                 if not word:
                     continue
 
                 if word not in self.dictionary:
                     #debug(word)
-                    words.add(word)
- 
-        # sort word list
-        words_s = sorted(words)
+                    self.words.add(word)
 
-        remove('../build/fa_IR.dic')
-        with open('../build/fa_IR.dic', 'w', encoding='utf-8', newline='') as f:
-            f.write('{0}\n'.format(len(words_s)))
-            for word in words_s:
-                f.write(word + '\n')
+
+    def dump_affixes(self, filename):
+        debug('dump affixes')
 
         # letter frequency
         letters = collections.defaultdict(int)
-        for word in words:
+        for word in self.words:
             for letter in word:
                 if letter == '/':
                     break;
@@ -809,16 +200,19 @@ class Parser:
         with open('affixes', 'r', encoding='utf-8') as f:
             affix = f.read()
 
-        remove('../build/fa_IR.aff')
-        with open('../build/fa_IR.aff', 'w', encoding='utf-8', newline='') as f:
+        remove_file(filename)
+        with open(filename, 'w', encoding='utf-8', newline='') as f:
             frequency = ''
             for letter in letters_s:
                 frequency += letter[0]
 
             f.write(affix.format(VERSIAN, datetime.datetime.now().strftime("%Y-%m-%d"), frequency))
 
+        if not os.path.isfile(filename):
+            debug('file does not exist: %s' % filename)
+            return
+
         # dict_delta (foreign words)
-        ################ shutil.copy('dic_delta', '../build/fa_IR.dic_delta')
         dic_delta = set()
         with open('dic_delta', 'r', encoding='utf-8') as f:
             for line in f.readlines():
@@ -826,24 +220,688 @@ class Parser:
 
                 if word.startswith('#'):
                     continue
-                    
+
                 if not word:
                     continue
 
                 if word not in self.dictionary:
                     #debug(word)
                     dic_delta.add(word)
-        
+
         dic_delta_s = sorted(dic_delta)
-        
-        remove('../build/fa_IR.dic_delta')
+
+        remove_file('../build/fa_IR.dic_delta')
         with open('../build/fa_IR.dic_delta', 'w', encoding='utf-8', newline='') as f:
             for word in dic_delta_s:
                 f.write(word + '\n')
-                
+
+
+    def dump_dictionary(self, filename):
+        debug('dump dictionary')
+
+        # sort word list
+        words_s = sorted(self.words)
+
+        remove_file(filename)
+        with open(filename, 'w', encoding='utf-8', newline='') as f:
+            f.write('{0}\n'.format(len(words_s)))
+            for word in words_s:
+                f.write(word + '\n')
+
+
+    def pars_main_dic(self):
+        debug('pars main dic')
+
+        for key, value in self.dictionary.items():
+            for attrs in value:
+                word = key
+                pos = attrs[0]
+                offensive = attrs[1]
+                ends_with_vowel = attrs[2]
+                ends_with_aah_uh = attrs[3]
+                label = ''
+                kam_dandane = self.is_kam_dandane(word)
+
+        ### Verb ########################################################################################
+                if pos.startswith('verb') :
+                    label += ''
+
+
+        ### Noun ########################################################################################
+                elif pos == 'noun_common_singular':
+                    if word.endswith(PERSIAN_HE):
+                        if ends_with_aah_uh:
+                            label += 'sa'   # نگاهم، نگاهت، نگاهش، نگاهمان، نگاهتان، نگاهشان
+                                            # کوهم، کوهت، کوهش، کوهمان، کوهتان، کوهشان
+                            label += 'sr'   # نگاهم، نگاهی، نگاهیم، نگاهید، نگاهند
+                                            # کوهم، کوهی، کوهیم، کوهید، کوهند
+                            label += 'sg'   # نگاه‌ها، کوه‌ها
+                                            # نگاه‌های، کوه‌های
+                                            # نگاه‌هایی، کوه‌هایی
+                            label += 'sh'   # نگاه‌هایم، نگاه‌هایت، نگاه‌هایش، نگاه‌هایمان، نگاه‌هایتان، نگاه‌هایشان
+                                            # کوه‌هایم، کوه‌هایت، کوه‌هایش، کوه‌هایمان، کوه‌هایتان، کوه‌هایشان
+                            label += 'si'   # نگاه‌هاست، کوه‌هاست
+                            label += 'sl'   # نگاهی، کوهی
+                            if kam_dandane:
+                                label += 'sd'   # نگاهها، کوهها
+                                                # نگاههای، کوههای
+                                                # نگاههایی، کوههایی
+                        elif  ends_with_vowel:
+                            label += 'sc'   # خانه‌ام، خانه‌ات، خانه‌اش، خانه‌مان، خانه‌تان، خانه‌شان
+                            label += 'sp'   # خانه‌ام، خانه‌ای، خانه‌ایم، خانه‌اید، خانه‌اند
+                            label += 'sg'   # خانه‌ها
+                                            # خانه‌های
+                                            # خانه‌هایی
+                            label += 'sh'   # خانه‌هایم، خانه‌هایت، خانه‌هایش، خانه‌هایمان، خانه‌هایتان، خانه‌هایشان
+                            label += 'si'   # خانه‌هاست
+                            label += 'sm'   # خانه‌ای
+                            label += 'sk'   # خانه‌ی، خانهٔ
+                        else:
+                            label += 'sc'   # روبه‌ام، روبه‌ات، روبه‌اش، روبه‌مان، روبه‌تان، روبه‌شان
+                            label += 'sp'   # روبه‌ام، روبه‌ای، روبه‌ایم، روبه‌اید، روبه‌اند
+                            label += 'sg'   # روبه‌ها
+                                            # روبه‌های
+                                            # روبه‌هایی
+                            label += 'sh'   # روبه‌هایم، روبه‌هایت، روبه‌هایش، روبه‌هایمان، روبه‌هایتان، روبه‌هایشان
+                            label += 'si'   # روبه‌هاست
+                            label += 'sl'   # روبهی
+
+                    elif word.endswith(PERSIAN_WAW):
+                        if ends_with_vowel:
+                            label += 'sb'   # عمویم، عمویت، عمویش، عمویمان، عمویتان، عمویشان
+                            label += 'sq'   # عمویم، عمویی، عموست، عموییم، عمویید، عمویند
+                            label += 'sd'   # عموها
+                                            # عموهای
+                                            # عموهایی
+                            label += 'se'   # عموهایم، عموهایت، عموهایش، عموهایمان، عموهایتان، عموهایشان
+                            label += 'sf'   # عموهاست
+                            label += 'sl'   # عموی
+                            label += 'sn'   # عمویی
+                        else:
+                            label += 'sa'   # رهروم، رهروت، رهروش، رهرومان، رهروتان، رهروشان
+                            label += 'sr'   # رهروم، رهروی، رهرویم، رهروید، رهروند
+                            label += 'sd'   # رهروها
+                                            # رهروهای
+                                            # رهروهایی
+                            label += 'se'   # رهروهایم، رهروهایت، رهروهایش، رهروهایمان، رهروهایتان، رهروهایشان
+                            label += 'sf'   # رهروهاست
+                            label += 'sl'   # رهروی
+                            label += 'sj'   # رهروان، رهروانی
+
+                    elif word.endswith(PERSIAN_YE):
+                        label += 'sc'   # کشتی‌ام، کشتی‌ات، کشتی‌اش، کشتی‌مان، کشتی‌تان، کشتی‌شان
+                        label += 'sp'   # کشتی‌ام، کشتی‌ای، کشتی‌ایم، کشتی‌اید، کشتی‌اند
+                        label += 'sg'   # کشتی‌ها
+                                        # کشتی‌های
+                                        # کشتی‌هایی
+                        label += 'sh'   # کشتی‌هایم، کشتی‌هایت، کشتی‌هایش، کشتی‌هایمان، کشتی‌هایتان، کشتی‌هایشان
+                        label += 'si'   # کشتی‌هاست
+                        label += 'sm'   # کشتی‌ای
+                        label += 'sj'   # شکارچیان، شکارچیانی
+
+                    elif word.endswith(PERSIAN_ALEF):
+                        label += 'sb'   # پایم، پایت، پایش، پایمان، پایتان، پایشان
+                        label += 'sq'   # پایم، پایی، پاست، پاییم، پایید، پایند
+                        label += 'sd'   # پاها
+                                        # پاهای
+                                        # پاهایی
+                        label += 'se'   # پاهایم، پاهایت، پاهایش، پاهایمان، پاهایتان، پاهایشان
+                        label += 'sf'   # پاهاست
+                        label += 'sl'   # پای
+                        label += 'sn'   # پایی
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        label += 'sa'   # برادرم، برادرت، برادرش، برادرمان، برادرتان، برادرشان
+                        label += 'so'   # برادرم، برادری، برادرست، برادریم، برادرید، برادرند
+                        label += 'sd'   # برادرها
+                                        # برادرهای
+                                        # برادرهایی
+                        label += 'se'   # برادرهایم، برادرهایت، برادرهایش، برادرهایمان، برادرهایتان، برادرهایشان
+                        label += 'sf'   # برادرهاست
+                        label += 'sl'   # برادری
+                        label += 'sj'   # برادران، برادرانی
+
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'sa'   # خطم، خطت، خطش، خطمان، خطتان، خطشان
+                        label += 'so'   # خطم، خطی، خطست، خطیم، خطید، خطند
+                        label += 'sg'   # خط‌ها
+                                        # خط‌های
+                                        # خط‌هایی
+                        label += 'sh'   # خط‌هایم، خط‌هایت، خط‌هایش، خط‌هایمان، خط‌هایتان، خط‌هایشان
+                        label += 'si'   # خط‌هاست
+                        label += 'sl'   # خطی
+                        label += 'sj'   # خیاطان، خیاطانی
+
+                    else:
+                        label += 'sa'   # کتابم، کتابت، کتابش، کتابمان، کتابتان، کتابشان
+                        label += 'so'   # کتابم، کتابی، کتابست، کتابیم، کتابید، کتابند
+                        label += 'sg'   # کتاب‌ها
+                                        # کتاب‌های
+                                        # کتاب‌هایی
+                        label += 'sh'   # کتاب‌هایم، کتاب‌هایت، کتاب‌هایش، کتاب‌هایمان، کتاب‌هایتان، کتاب‌هایشان
+                        label += 'si'   # کتاب‌هاست
+                        label += 'sl'   # کتابی
+                        label += 'sj'   # صاحبان، صاحبانی
+                        if kam_dandane:
+                            label += 'sd'   # کتابها
+                                            # کتابهای
+                                            # کتابهایی
+                            label += 'se'   # کتابهایم، کتابهایت، کتابهایش، کتابهایمان، کتابهایتان، کتابهایشان
+                            label += 'sf'   # کتابهاست
+
+                elif pos == 'noun_common_plural':
+                    if word.endswith(PERSIAN_HE):
+                        if ends_with_aah_uh:
+                            label += ''     # وجوه
+                        elif  ends_with_vowel:
+                            label += 'sc'   # فلاسفه‌ام، فلاسفه‌ات، فلاسفه‌اش، فلاسفه‌مان، فلاسفه‌تان، فلاسفه‌شان
+                            label += 'sp'   # فلاسفه‌ام، فلاسفه‌ای، فلاسفه‌ایم، فلاسفه‌اید، فلاسفه‌اند
+                            label += 'sk'   # فلاسفه‌ی، فلاسفهٔ
+                            label += 'sm'   # فلاسفه‌ای
+                        else:
+                            label += ''     # اشربه
+
+                    elif word.endswith(PERSIAN_YE):
+                        label += 'sc'   # فتاوی‌ام، فتاوی‌ات، فتاوی‌اش، فتاوی‌مان، فتاوی‌تان، فتاوی‌شان
+                        label += 'sp'   # فتاوی‌ام، فتاوی‌ای، فتاوی‌ایم، فتاوی‌اید، فتاوی‌اند
+                        label += 'sm'   # فتاوی‌ای
+
+                    elif word.endswith(PERSIAN_WAW):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_ALEF):
+                        label += 'sb'   # هدایایم، هدایایت، هدایایش، هدایایمان، هدایایتان، هدایایشان
+                        label += 'sq'   # هدایایم، هدایایی، هدایاست، هدایاییم، هدایایید، هدایایند
+                        label += 'sl'   # هدایای
+                        label += 'sn'   # هدایایی
+
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'sa'   # اقساطم، اقساطت، اقساطش، اقساطمان، اقساطتان، اقساطشان
+                        label += 'so'   # اقساطم، اقساطی، اقساطست، اقساطیم، اقساطید، اقساطند
+                        label += 'sl'   # اقساطی
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        label += 'sa'   # آثارم، آثارت، آثارش، آثارمان، آثارتان، آثارشان
+                        label += 'so'   # آثارم، آثاری، آثارست، آثاریم، آثارید، آثارند
+                        label += 'sl'   # آثاری
+
+                    else:
+                        label += 'sa'   # احزابم، احزابت، احزابش، احزابمان، احزابتان، احزابشان
+                        label += 'so'   # احزابم، احزابی، احزابست، احزابیم، احزابید، احزابند
+                        label += 'sl'   # احزابی
+
+                elif pos == 'noun_proper_singular':
+                    if word.endswith(PERSIAN_HE):
+                        if ends_with_aah_uh:
+                            label += 'sa'   # کرمانشاهم، کرمانشاهت، کرمانشاهش، کرمانشاهمان، کرمانشاهتان، کرمانشاهشان
+                            label += 'sr'   # کرمانشاهم، کرمانشاهی، کرمانشاهیم، کرمانشاهید، کرمانشاهند
+                            label += 'sg'   # کرمانشاه‌ها
+                                            # کرمانشاه‌های
+                                            # کرمانشاه‌هایی
+                            label += 'sh'   # کرمانشاه‌هایم، کرمانشاه‌هایت، کرمانشاه‌هایش، کرمانشاه‌هایمان، کرمانشاه‌هایتان، کرمانشاه‌هایشان
+                            label += 'si'   # کرمانشاه‌هاست
+                            label += 'sl'   # کرمانشاهی
+                        elif  ends_with_vowel:
+                            label += 'sc'   # آباده‌ام، آباده‌ات، آباده‌اش، آباده‌مان، آباده‌تان، آباده‌شان
+                            label += 'sp'   # آباده‌ام، آباده‌ای، آباده‌ایم، آباده‌اید، آباده‌اند
+                            label += 'sg'   # آباده‌ها
+                                            # آباده‌های
+                                            # آباده‌هایی
+                            label += 'sh'   # آباده‌هایم، آباده‌هایت، آباده‌هایش، آباده‌هایمان، آباده‌هایتان، آباده‌هایشان
+                            label += 'si'   # آباده‌هاست
+                            label += 'sm'   # آباده‌ای
+                            label += 'sk'   # آباده‌ی، آبادهٔ
+                        else:
+                                            # عبده -> abdoh
+                            label += 'sc'   # عبده‌ام، عبده‌ات، عبده‌اش، عبده‌مان، عبده‌تان، عبده‌شان
+                            label += 'sp'   # عبده‌ام، عبده‌ای، عبده‌ایم، عبده‌اید، عبده‌اند
+                            label += 'sg'   # عبده‌ها
+                                            # عبده‌های
+                                            # عبده‌هایی
+                            label += 'sh'   # عبده‌هایم، عبده‌هایت، عبده‌هایش، عبده‌هایمان، عبده‌هایتان، عبده‌هایشان
+                            label += 'si'   # عبده‌هاست
+                            label += 'sm'   # عبده‌ای
+
+                    elif word.endswith(PERSIAN_WAW):
+                        if ends_with_vowel:
+                            label += 'sb'   # باکویم، باکویت، باکویش، باکویمان، باکویتان، باکویشان
+                            label += 'sq'   # باکویم، باکویی، باکوست، باکوییم، باکویید، باکویند
+                            label += 'sd'   # باکوها
+                                            # باکوهای
+                                            # باکوهایی
+                            label += 'se'   # باکوهایم، باکوهایت، باکوهایش، باکوهایمان، باکوهایتان، باکوهایشان
+                            label += 'sf'   # باکوهاست
+                            label += 'sl'   # باکوی
+                            label += 'sn'   # باکویی
+                        else:
+                            label += 'sa'   # آپولوم، آپولوت، آپولوش، آپولومان، آپولوتان، آپولوشان
+                            label += 'sr'   # آپولوم، آپولوی، آپولویم، آپولوید، آپولوند
+                            label += 'sd'   # آپولوها
+                                            # آپولوهای
+                                            # آپولوهایی
+                            label += 'se'   # آپولوهایم، آپولوهایت، آپولوهایش، آپولوهایمان، آپولوهایتان، آپولوهایشان
+                            label += 'sf'   # آپولوهاست
+                            label += 'sl'   # آپولوی
+
+                    elif word.endswith(PERSIAN_YE):
+                        label += 'sc'   # آبادانی‌ام، آبادانی‌ات، آبادانی‌اش، آبادانی‌مان، آبادانی‌تان، آبادانی‌شان
+                        label += 'sp'   # آبادانی‌ام، آبادانی‌ای، آبادانی‌ایم، آبادانی‌اید، آبادانی‌اند
+                        label += 'sg'   # آبادانی‌ها
+                                        # آبادانی‌های
+                                        # آبادانی‌هایی
+                        label += 'sh'   # آبادانی‌هایم، آبادانی‌هایت، آبادانی‌هایش، آبادانی‌هایمان، آبادانی‌هایتان، آبادانی‌هایشان
+                        label += 'si'   # آبادانی‌هاست
+                        label += 'sm'   # آبادانی‌ای
+
+                    elif word.endswith(PERSIAN_ALEF):
+                        label += 'sb'   # آپادانایم، آپادانایت، آپادانایش، آپادانایمان، آپادانایتان، آپادانایشان
+                        label += 'sq'   # آپادانایم، آپادانایی، آپاداناست، آپاداناییم، آپادانایید، آپادانایند
+                        label += 'sd'   # آپاداناها
+                                        # آپاداناهای
+                                        # آپاداناهایی
+                        label += 'se'   # آپاداناهایم، آپاداناهایت، آپاداناهایش، آپاداناهایمان، آپاداناهایتان، آپاداناهایشان
+                        label += 'sf'   # آپاداناهاست
+                        label += 'sl'   # آپادانای
+                        label += 'sn'   # آپادانایی
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        label += 'sa'   # البرزم، البرزت، البرزش، البرزمان، البرزتان، البرزشان
+                        label += 'so'   # البرزم، البرزی، البرزست، البرزیم، البرزید، البرزند
+                        label += 'sd'   # البرزها
+                                        # البرزهای
+                                        # البرزهایی
+                        label += 'se'   # البرزهایم، البرزهایت، البرزهایش، البرزهایمان، البرزهایتان، البرزهایشان
+                        label += 'sf'   # البرزهاست
+                        label += 'sl'   # البرزی
+
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'sa'   # بقراطم، بقراطت، بقراطش، بقراطمان، بقراطتان، بقراطشان
+                        label += 'so'   # بقراطم، بقراطی، بقراطست، بقراطیم، بقراطید، بقراطند
+                        label += 'sg'   # بقراط‌ها
+                                        # بقراط‌های
+                                        # بقراط‌هایی
+                        label += 'sh'   # بقراط‌هایم، بقراط‌هایت، بقراط‌هایش، بقراط‌هایمان، بقراط‌هایتان، بقراط‌هایشان
+                        label += 'si'   # بقراط‌هاست
+                        label += 'sl'   # بقراطی
+
+                    else:
+                        label += 'sa'   # بنابم، بنابت، بنابش، بنابمان، بنابتان، بنابشان
+                        label += 'so'   # بنابم، بنابی، بنابست، بنابیم، بنابید، بنابند
+                        label += 'sg'   # بناب‌ها
+                                        # بناب‌های
+                                        # بناب‌هایی
+                        label += 'sh'   # بناب‌هایم، بناب‌هایت، بناب‌هایش، بناب‌هایمان، بناب‌هایتان، بناب‌هایشان
+                        label += 'si'   # بناب‌هاست
+                        label += 'sl'   # بنابی
+
+                elif pos == 'noun_proper_plural':
+                    if word.endswith(PERSIAN_HE):
+                        if ends_with_aah_uh:
+                            debug('unpredicted case for: ' + word + ':' + pos)
+                        elif  ends_with_vowel:
+                            label += 'sc'   # ارامنه‌ام، ارامنه‌ات، ارامنه‌اش، ارامنه‌مان، ارامنه‌تان، ارامنه‌شان
+                            label += 'sp'   # ارامنه‌ام، ارامنه‌ای، ارامنه‌ایم، ارامنه‌اید، ارامنه‌اند
+                            label += 'sk'   # ارامنه‌ی، ارامنهٔ
+                            label += 'sm'   # ارامنه‌ای
+                        else:
+                            debug('unpredicted case for: ' + word + ':' + pos)
+
+                    elif word.endswith(PERSIAN_YE):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_WAW):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_ALEF):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    else:
+                        label += 'sa'   # اماراتم، اماراتت، اماراتش، اماراتمان، اماراتتان، اماراتشان
+                        label += 'so'   # اماراتم، اماراتی، اماراتست، اماراتیم، اماراتید، اماراتند
+                        label += 'sl'   # اماراتی
+
+        ### Adjective ########################################################################################
+                elif pos == 'adjective_positive':
+                    if word.endswith(PERSIAN_HE):
+                        if ends_with_aah_uh:
+                            label += 'sa'   # کوتاهم، کوتاهت، کوتاهش، کوتاهمان، کوتاهتان، کوتاهشان
+                                            # باشکوهم، باشکوهت، باشکوهش، باشکوهمان، باشکوهتان، باشکوهشان
+                            label += 'sr'   # کوتاهم، کوتاهی، کوتاهیم، کوتاهید، کوتاهند
+                                            # باشکوهم، باشکوهی، باشکوهیم، باشکوهید، باشکوهند
+                            label += 'sl'   # کوتاهی، باشکوهی
+                            label += 'sg'   # کوتاه‌ها، باشکوه‌ها
+                                            # کوتاه‌های، باشکوه‌های
+                                            # کوتاه‌هایی، باشکوه‌هایی
+                            label += 'si'   # کوتاه‌هاست، باشکوه‌هاست
+                            label += 'su'   # کوتاه‌تر، کوتاه‌ترین
+                                            # باشکوه‌تر، باشکوه‌ترین
+                                            # کوتاه‌تری، باشکوه‌تری
+                                            # کوتاه‌ترها، کوتاه‌ترهای
+                                            # باشکوه‌ترها، باشکوه‌ترهای
+                                            # کوتاه‌ترین‌ها، کوتاه‌ترین‌های
+                                            # باشکوه‌ترین‌ها، باشکوه‌ترین‌های
+                        elif ends_with_vowel:
+                            label += 'sc'   # شایسته‌ام، شایسته‌ات، شایسته‌اش، شایسته‌مان، شایسته‌تان، شایسته‌شان
+                            label += 'sp'   # شایسته‌ام، شایسته‌ای، شایسته‌ایم، شایسته‌اید، شایسته‌اند
+                            label += 'sk'   # شایسته‌ی، شایستهٔ
+                            label += 'sg'   # شایسته‌ها
+                                            # شایسته‌های
+                                            # شایسته‌هایی
+                            label += 'si'   # شایسته‌هاست
+                            label += 'su'   # شایسته‌تر، شایسته‌ترین
+                                            # شایسته‌تری
+                                            # شایسته‌ترها، شایسته‌ترهای
+                                            # شایسته‌ترین‌ها، شایسته‌ترین‌های
+                        else:
+                            label += 'sc'   # کوته‌ام، کوته‌ات، کوته‌اش، کوته‌مان، کوته‌تان، کوته‌شان
+                            label += 'sp'   # کوته‌ام، کوته‌ای، کوته‌ایم، کوته‌اید، کوته‌اند
+                            label += 'sl'   # کوتهی
+                            label += 'sg'   # کوته‌ها
+                                            # کوته‌های
+                                            # کوته‌هایی
+                            label += 'si'   # کوته‌هاست
+                            label += 'su'   # کوته‌تر، کوته‌ترین
+                                            # کوته‌تری
+                                            # کوته‌ترها، کوته‌ترهای
+                                            # کوته‌ترین‌ها، کوته‌ترین‌های
+
+                    elif word.endswith(PERSIAN_WAW):
+                        if ends_with_vowel:
+                            label += 'sb'   # پررویم، پررویت، پررویش، پررویمان، پررویتان، پررویشان
+                            label += 'sq'   # پررویم، پررویی، پرروست، پرروییم، پررویید، پررویند
+                            label += 'sl'   # پرروی
+                            label += 'sn'   # پررویی
+                            label += 'sd'   # پرروها
+                                            # پرروهای
+                                            # پرروهایی
+                            label += 'sf'   # پرروهاست
+                            label += 'st'   # پرروتر، پرروترین
+                                            # پرروتری
+                                            # پرروترها، پرروترهای
+                                            # پرروترین‌ها، پرروترین‌های
+                        else:
+                            label += 'sa'   # کنجکاوم، کنجکاوت، کنجکاوش، کنجکاومان، کنجکاوتان، کنجکاوشان
+                            label += 'sr'   # کنجکاوم، کنجکاوی، کنجکاویم، کنجکاوید، کنجکاوند
+                            label += 'sl'   # کنجکاوی
+                            label += 'sd'   # کنجکاوها
+                                            # کنجکاوهای
+                                            # کنجکاوهایی
+                            label += 'sf'   # کنجکاوهاست
+                            label += 'st'   # کنجکاوتر، کنجکاوترین
+                                            # کنجکاوتری
+                                            # کنجکاوترها، کنجکاوترهای
+                                            # کنجکاوترین‌ها، کنجکاوترین‌های
+                            label += 'sj'   # کنجکاوان، کنجکاوانی
+
+                    elif word.endswith(PERSIAN_YE):
+                        label += 'sc'   # عالی‌ام، عالی‌ات، عالی‌اش، عالی‌مان، عالی‌تان، عالی‌شان
+                        label += 'sp'   # عالی‌ام، عالی‌ای، عالی‌ایم، عالی‌اید، عالی‌اند
+                        label += 'sm'   # عالی‌ای
+                        label += 'sg'   # عالی‌ها
+                                        # عالی‌های
+                                        # عالی‌هایی
+                        label += 'si'   # عالی‌هاست
+                        label += 'su'   # عالی‌تر، عالی‌ترین
+                                        # عالی‌تری
+                                        # عالی‌ترها، عالی‌ترهای
+                                        # عالی‌ترین‌ها، عالی‌ترین‌های
+
+                    elif word.endswith(PERSIAN_ALEF):
+                        label += 'sb'   # اعلایم، اعلایت، اعلایش، اعلایمان، اعلایتان، اعلایشان
+                        label += 'sq'   # اعلایم، اعلایی، اعلاست، اعلاییم، اعلایید، اعلایند
+                        label += 'sl'   # اعلای
+                        label += 'sn'   # اعلایی
+                        label += 'sd'   # اعلاها
+                                        # اعلاهای
+                                        # اعلاهایی
+                        label += 'sf'   # اعلاهاست
+                        label += 'st'   # اعلاتر، اعلاترین
+                                        # اعلاتری
+                                        # اعلاترها، اعلاترهای
+                                        # اعلاترین‌ها، اعلاترین‌های
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        label += 'sa'   # آبادم، آبادت، آبادش، آبادمان، آبادتان، آبادشان
+                        label += 'so'   # آبادم، آبادی، آبادست، آبادیم، آبادید، آبادند
+                        label += 'sl'   # آبادی
+                        label += 'sd'   # آبادها
+                                        # آبادهای
+                                        # آبادهایی
+                        label += 'sf'   # آبادهاست
+                        label += 'st'   # آبادتر، آبادترین
+                                        # آبادتری
+                                        # آبادترها، آبادترهای
+                                        # آبادترین‌ها، آبادترین‌های
+                        label += 'sj'   # آبادان، تنومندان، آبادانی، تنومندانی
+
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        label += 'sa'   # بانشاطم، بانشاطت، بانشاطش، بانشاطمان، بانشاطتان، بانشاطشان
+                        label += 'so'   # بانشاطم، بانشاطی، بانشاطست، بانشاطیم، بانشاطید، بانشاطند
+                        label += 'sl'   # بانشاطی
+                        label += 'sg'   # بانشاط‌ها
+                                        # بانشاط‌های
+                                        # بانشاط‌هایی
+                        label += 'si'   # بانشاط‌هاست
+                        label += 'st'   # بانشاطتر، بانشاطترین
+                                        # بانشاطتری
+                                        # بانشاطترها، بانشاطترهای
+                                        # بانشاطترین‌ها، بانشاطترین‌های
+                        label += 'su'   # بانشاط‌تر، بانشاط‌ترین
+                                        # بانشاط‌تری
+                                        # بانشاط‌ترها، بانشاط‌ترهای
+                                        # بانشاط‌ترین‌ها، بانشاط‌ترین‌های
+                        label += 'sj'   # بانشاطان، بانشاطانی
+
+                    else:
+                        label += 'sa'   # مرتبم، مرتبت، مرتبش، مرتبمان، مرتبتان، مرتبشان
+                        label += 'so'   # مرتبم، مرتبی، مرتبست، مرتبیم، مرتبید، مرتبند
+                        label += 'sl'   # مرتبی
+                        label += 'sg'   # مرتب‌ها
+                                        # مرتب‌های
+                                        # مرتب‌هایی
+                        label += 'si'   # مرتب‌هاست
+                        label += 'su'   # مرتب‌تر، مرتب‌ترین
+                                        # مرتب‌تری
+                                        # مرتب‌ترها، مرتب‌ترهای
+                                        # مرتب‌ترین‌ها، مرتب‌ترین‌های
+                        label += 'sj'   # خوبان، خوبانی
+                        if kam_dandane:
+                            label += 'sd'   # مرتبها
+                                            # مرتبهای
+                                            # مرتبهایی
+                            label += 'sf'   # مرتبهاست
+                            label += 'st'   # مرتبتر، مرتبترین
+                                            # مرتبتری
+                                            # مرتبترها، مرتبترهای
+                                            # مرتبترین‌ها، مرتبترین‌های
+
+                elif pos == 'adjective_comparative':
+                    if word.endswith(PERSIAN_HE):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_WAW):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_YE):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        label += 'sa'   # ارشدم، ارشدت، ارشدش، ارشدمان، ارشدتان، ارشدشان
+                        label += 'so'   # ارشدم، ارشدی، ارشدست، ارشدیم، ارشدید، ارشدند
+                        label += 'sl'   # ارشدی
+                        label += 'sd'   # ارشدها
+                                        # ارشدهای
+                                        # ارشدهایی
+                        label += 'sf'   # ارشدهاست
+
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+
+                    else:
+                        label += 'sa'   # افزونم، افزونت، افزونش، افزونمان، افزونتان، افزونشان
+                        label += 'so'   # افزونم، افزونی، افزونست، افزونیم، افزونید، افزونند
+                        label += 'sl'   # افزونی
+                        label += 'sg'   # افزون‌ها
+                                        # افزون‌های
+                                        # افزون‌هایی
+                        ## label += 'si'   # [???] افزون‌هاست
+
+
+                elif pos == 'adjective_superlative':
+                    if word.endswith(PERSIAN_HE):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_WAW):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_YE):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+                        label += ''
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        label += 'sa'   # اولی‌ترم، اولی‌ترت، اولی‌ترش، اولی‌ترمان، اولی‌ترتان، اولی‌ترشان
+                        label += 'so'   # اولی‌ترم، اولی‌تری، اولی‌ترست، اولی‌تریم، اولی‌ترید، اولی‌ترند
+                        label += 'sl'   # اولی‌تری
+                        label += 'sd'   # اولی‌ترها
+                                        # اولی‌ترهای
+                                        # اولی‌ترهایی
+                        label += 'sf'   # اولی‌ترهاست
+
+                    elif word.endswith(PERSIAN_TA) or \
+                         word.endswith(PERSIAN_ZA):
+                        debug('unpredicted case for: ' + word + ':' + pos)
+
+                    else:
+                        label += 'sa'   # بهترینم، بهترینت، بهترینش، بهترینمان، بهترینتان، بهترینشان
+                        label += 'so'   # بهترینم، بهترینی، بهترینست، بهترینیم، بهترینید، بهترینند
+                        label += 'sl'   # بهترینی
+                        label += 'sg'   # بهترین‌ها
+                                        # بهترین‌های
+                                        # بهترین‌هایی
+                        label += 'si'   # بهترین‌هاست
+
+        ### Adverb ########################################################################################
+                elif pos == 'adverb':
+                    label += ''
+
+        ### Pronoun ########################################################################################
+                elif pos == 'pronoun':
+                    if word.endswith(PERSIAN_HE):
+                        if ends_with_aah_uh:
+                            debug('unpredicted case for: ' + word + ':' + pos)
+                            label += ''
+                        elif  ends_with_vowel:
+                            label += 'sp'   # آنچه‌ام، آنچه‌ای، آنچه‌ایم، آنچه‌اید، آنچه‌اند
+                        else:
+                            label += ''
+
+                    elif word.endswith(PERSIAN_WAW):
+                        if ends_with_vowel:
+                            label += 'sq'   # همویم، همویی، هموست، هموییم، همویید، همویند
+                        else:
+                            label += ''     # تو
+
+                    elif word.endswith(PERSIAN_YE):
+                        ### [???]  بعضی‌مان، بعضی‌تان، بعضی‌شان
+                        label += 'sp'   # چی‌ام، چی‌ای، چی‌ایم، چی‌اید، چی‌اند
+
+                    elif word.endswith(PERSIAN_ALEF):
+                        label += 'sq'   # آنهایم، آنهایی، آنهاست، آنهاییم، آنهایید، آنهایند
+
+                    elif word.endswith(PERSIAN_DETACHED):
+                        label += 'so'   # دگرم، دگری، دگرست، دگریم، دگرید، دگرند
+
+                    else:
+                        label += 'so'   # آنم، آنی، آنست، آنیم، آنید، آنند
+
+        ### Number ########################################################################################
+                elif pos == 'number':
+                    label += ''
+
+        ### Neda ########################################################################################
+                elif pos == 'neda':
+                    label += ''
+
+        ### Preposition ########################################################################################
+
+                elif pos == 'preposition':
+                    label += ''
+
+        ### Conjunction ########################################################################################
+                elif pos == 'conjunction':
+                    label += ''
+
+        ### Punctuation ########################################################################################
+                elif pos == 'punctuation':
+                    label += ''
+
+        ### Foreign ########################################################################################
+                elif pos == 'foreign':
+                    if word.endswith(PERSIAN_HE):
+                        label += ''
+
+                    else:
+                        label += 'sl'   # طرفة‌العینی
+
+                else:
+                    debug('{0} {1}: unknown tag'.format(word, pos))
+
+
+                # offensive word
+                if offensive:
+                    label += '!!'
+
+                if label:
+                    word += '/'+label
+
+                if len(attrs) > 4:
+                    word += attrs[4]
+
+                self.words.add(word)
+
+
 
 if __name__ == '__main__':
-    p = Parser()
-    p.read_lexicon('lexicon')
-    p.pars()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--mode", help="Run mode")
+    parser.add_argument("-i", "--input", help="input lexicon file")
+    parser.add_argument("-o", "--output", help="input dictionary file")
+    args = parser.parse_args()
 
+    if args.mode:
+        lilak = Lilak(args.mode)
+        lilak.read_lexicon(args.input)
+        lilak.pars_main_dic()
+        lilak.dump_dictionary(args.output)
+    else:
+        lilak = Lilak()
+        lilak.read_lexicon('lexicon')
+        lilak.pars_main_dic()
+        lilak.pars_user_dic('dic_users')
+        lilak.dump_affixes('../build/fa_IR.aff')
+        lilak.dump_dictionary('../build/fa_IR.dic')
+
+    debug('done!')
