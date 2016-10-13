@@ -43,6 +43,11 @@ COMPOUNDMIN           1
 
 ## clitics
 
+PFX pa      N        1
+PFX pa      0        بی‌/FFUU       .
+
+
+
 SFX sa      N        6
 SFX sa      0        م/FFWW         .
 SFX sa      0        ت/FFWW         .

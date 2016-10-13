@@ -269,6 +269,9 @@ class Lilak:
 
         ### Noun ########################################################################################
                 elif pos == 'noun_common_singular':
+                    
+                    label += 'pa'   # بی‌انگیزه، بی‌حوصله، بی‌خانه
+                    
                     if word.endswith(PERSIAN_HE):
                         if ends_with_aah_uh:
                             label += 'sa'   # نگاهم، نگاهت، نگاهش، نگاهمان، نگاهتان، نگاهشان
