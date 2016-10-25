@@ -580,7 +580,7 @@ class Lilak:
                         label += 'sl'   # اماراتی
 
         ### Adjective ########################################################################################
-                elif pos == 'adjective_positive':
+                elif pos == 'adjective':
                     if word.endswith(PERSIAN_HE):
                         if ends_with_aah_uh:
                             label += 'sa'   # کوتاهم، کوتاهت، کوتاهش، کوتاهمان، کوتاهتان، کوتاهشان
@@ -735,6 +735,18 @@ class Lilak:
                                             # مرتبترها، مرتبترهای
                                             # مرتبترین‌ها، مرتبترین‌های
 
+                elif pos == 'adjective_participle':
+                    if word.endswith(PERSIAN_HE):
+                            label += 'sc'   # شایسته‌ام، شایسته‌ات، شایسته‌اش، شایسته‌مان، شایسته‌تان، شایسته‌شان
+                            label += 'sk'   # شایسته‌ی، شایستهٔ
+                            label += 'sg'   # شایسته‌ها
+                                            # شایسته‌های
+                                            # شایسته‌هایی
+                            label += 'si'   # شایسته‌هاست
+
+                    else:
+                        debug('adjective_participle should ends with HE only: ' + word + ':' + pos)
+                                            
                 elif pos == 'adjective_comparative':
                     if word.endswith(PERSIAN_HE):
                         debug('unpredicted case for: ' + word + ':' + pos)
