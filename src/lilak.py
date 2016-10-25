@@ -857,10 +857,6 @@ class Lilak:
                 elif pos == 'conjunction':
                     label += ''
 
-        ### Punctuation ########################################################################################
-                elif pos == 'punctuation':
-                    label += ''
-
         ### Foreign ########################################################################################
                 elif pos == 'foreign':
                     if word.endswith(PERSIAN_HE):
