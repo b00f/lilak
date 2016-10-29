@@ -96,7 +96,3 @@ Special thanks to
 * 5j9 : [github](https://github.com/5j9)
 * Reza Moshksar : [github](https://github.com/reza1615)
 
-##Contact Me
-
-Please feel free to contact me by this email address:
-mostafa.sedaghat@gmail.com (Mostafa Sedaghat Joo)
