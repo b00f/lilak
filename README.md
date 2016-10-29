@@ -91,9 +91,10 @@ from Spanish lilac, from Arabic lilak, from Persian lilak, variant of nilak "blu
 
 ##Thanks
 Special thanks to 
-* Hamid Farrroukh [alefbaye2om](http://alefbaye2om.org/) 
-* 5j9 https://github.com/5j9
-* Reza Moshksar reza.moshksar@gmail.com
+* Dr. Hamid Farrroukh : [alefbaye2om](http://alefbaye2om.org/) 
+* Dr. Hamid Hassani : [wikipedia](https://en.wikipedia.org/wiki/Hamid_Hassani)
+* 5j9 : [github](https://github.com/5j9)
+* Reza Moshksar : [github](https://github.com/reza1615)
 
 ##Contact Me
 
