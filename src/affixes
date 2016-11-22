@@ -27,7 +27,8 @@ FLAG long
 
 TRY {2}
 KEY ضصثقفغعهخحجچپ|شسیبلاتنمکگ|ظطزرذدئو
-IGNORE ًٌٍَُِّـْ
+IGNORE ًٌٍَُِّٰٓٔـْ
+
 
 NOSPLITSUGS
 
@@ -183,21 +184,48 @@ SFX su      0        ‌ترین/sg       .
 
 
 
-REP 5
-REP ي   ی
-REP ك   ک
+REP 17
+# ZWNJ +Ya > Hamzeh 
+REP ‌ی   ٔ 
+#Hamzeh on Ya & Ya
+REP ئ   ی 
+#Arabic
+REP ي   ی 
+#Urdu
+REP ى   ی 
+#Urdu
+REP ے   ی 
+#Pushtu
+REP ۍ   ی 
+#Uyghur
+REP ې   ی 
+#Arabic
+REP ك   ک 
+#Urdu
+REP ڪ   ک 
+#Pushtu
+REP ﻙ   ک 
+#Uyghur
+REP ﻚ   ک 
 REP ة   ه
 REP ة   ت
+REP أ   ا
+REP إ   ا
+REP ؤ   و
 REP ‌    _
 
-MAP 10
+
+MAP 13
 MAP ضص
 MAP طظ
 MAP ضظ
 MAP فق
 MAP غع
 MAP چخحج
-MAP بپ
+MAP بیپ
+MAP نثت
 MAP کگ
 MAP ژزر
-MAP اآ
+MAP اآأإ
+MAP دذ
+MAP ءٔ
