@@ -172,14 +172,14 @@ SFX sr      0        ند/FFWW        .
 
 
 SFX st      N        2
-SFX st      0        تر/sdslse        .
-SFX st      0        ترین/sgsh        .
+SFX st      0        تر/sdslsesa        .
+SFX st      0        ترین/sgshsa        .
 
 
 ## with zwnj
 SFX su      N        2
-SFX su      0        ‌تر/sdslse       .
-SFX su      0        ‌ترین/sgsh       .
+SFX su      0        ‌تر/sdslsesa       .
+SFX su      0        ‌ترین/sgshsa       .
 
 
 
