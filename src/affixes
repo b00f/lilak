@@ -183,21 +183,29 @@ SFX su      0        ‌ترین/sg       .
 
 
 
-REP 5
+REP 9
 REP ي   ی
+REP ئ   ی 
 REP ك   ک
 REP ة   ه
 REP ة   ت
+REP ؤ   و
+REP أ   ا
+REP إ   ا
 REP ‌    _
 
-MAP 10
+MAP 13
 MAP ضص
 MAP طظ
 MAP ضظ
 MAP فق
 MAP غع
 MAP چخحج
-MAP بپ
+MAP بیپ
+MAP نثت
 MAP کگ
 MAP ژزر
-MAP اآ
+MAP اآأإ
+MAP دذ
+MAP ءٔ
+
