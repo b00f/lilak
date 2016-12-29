@@ -116,7 +116,7 @@ class Lilak:
                     if n != ZWNJ:
                         dandane = dandane + 1
 
-        return (dandane < 5)
+        return (dandane < 10)
 
 
     def read_lexicon(self, filename):
@@ -341,6 +341,10 @@ class Lilak:
                         label += 'si'   # کشتی‌هاست
                         label += 'sm'   # کشتی‌ای
                         label += 'sj'   # شکارچیان، شکارچیانی
+                        if kam_dandane:
+                            label += 'sd'   # بازیها
+                                            # بازیهای
+                                            # بازیهایی
 
                     elif word.endswith(PERSIAN_ALEF):
                         label += 'sb'   # پایم، پایت، پایش، پایمان، پایتان، پایشان
@@ -855,9 +859,10 @@ class Lilak:
 
         ### Number ########################################################################################
                 elif pos == 'numeral':
-                    label += ''
-                elif pos == 'numeral_cardinal':
-                    label += ''
+                    if word.endswith(PERSIAN_DETACHED):
+                        label += 'sd'
+                    else:
+                        label += 'sg'
 
         ### Neda ########################################################################################
                 elif pos == 'interjection':

@@ -75,6 +75,7 @@ run_test('../test/text7')
 run_test('../test/text8')
 run_test('../test/text9')
 run_test('../test/text10')
+run_test('../test/text11')
 run_test('../test/verbs')
 
 percentage = ((detected * 100.0) / (detected + not_detected))
