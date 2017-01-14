@@ -886,6 +886,7 @@ class Lilak:
                         label += 'sf'   # میلیاردهاست
                     else:
                         label += 'sg'   # میلیون‌ها
+                        label += 'si'   # میلیون‌هاست
                         if kam_dandane:
                             label += 'sd'   # میلیونها
                                             # میلیونهای
