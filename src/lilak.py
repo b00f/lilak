@@ -103,7 +103,7 @@ class Lilak:
         # نویسه‌های «ورزژدذط ظ ک گ ا لءة» و فاصلهٔ مجازی که دندانه‌ها را جدا می‌کنند نباید قبل از آنها در محاسبه بیاید.
         # مثلاً «اسباب‌بازیها» نباید دندانهٔ «اسباب‌باز» محاسبه شود 
         # در نتیجه کلمهٔ «اسباب‌بازیها» را هم باید قبول کند.
-        for SeperatCharacter in [PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_TA, PERSIAN_ZA, PERSIAN_Lam, ZWNJ
+        for SeperatCharacter in [PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_TA, PERSIAN_ZA, PERSIAN_LAM, ZWNJ,
                                  PERSIAN_WAW, PERSIAN_DAL, PERSIAN_ZAL, PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE,
                                  PERSIAN_HAMZE, PERSIAN_KAF, PERSIAN_GAF, Arabic_TE]:
             if  SeperatCharacter in word:
