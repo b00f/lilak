@@ -882,9 +882,15 @@ class Lilak:
         ### Number ########################################################################################
                 elif pos == 'numeral':
                     if word.endswith(PERSIAN_DETACHED):
-                        label += 'sd'
+                        label += 'sd'   # میلیاردها
+                        label += 'sf'   # میلیاردهاست
                     else:
-                        label += 'sg'
+                        label += 'sg'   # میلیون‌ها
+                        if kam_dandane:
+                            label += 'sd'   # میلیونها
+                                            # میلیونهای
+                                            # میلیونهایی
+                            label += 'sf'   # میلیونهاست
 
         ### Neda ########################################################################################
                 elif pos == 'interjection':
