@@ -47,6 +47,12 @@ PFX pa      N        1
 PFX pa      0        بی‌/FFUU       .
 
 
+PFX pa      N        4
+PFX pb      0       با/FFUU        .
+PFX pb      0       نا/FFUU        .
+PFX pb      0       غیر/FFUU       .
+PFX pb      0       ضد/FFUU        .
+
 
 SFX sa      N        6
 SFX sa      0        م/FFWW         .
