@@ -62,6 +62,11 @@ PERSIAN_TE    = '\u062A'
 PERSIAN_SE    = '\u062B'
 PERSIAN_NON   = '\u0646'
 PERSIAN_HAMZE = '\u0621'
+PERSIAN_LAM   = '\u0644'
+PERSIAN_KAF   = '\u06A9'
+PERSIAN_GAF   = '\u06AF'
+ARABIC_TE     = '\u0629'
+
 PERSIAN_DETACHED = (PERSIAN_WAW, PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_ZAL, \
                     PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE, PERSIAN_HAMZE)
 
@@ -93,7 +98,17 @@ class Lilak:
             return 0
 
         dandane = 0;
-
+        # http://www.persianacademy.ir/fa/pishvand.aspx
+        # هرگاه کلمه پردندانه (بیش­از سه دندانه) شود و یا به «ط» و «ظ» ختم شود.
+        # نویسه‌های «ورزژدذط ظ ک گ ا لءة» و فاصلهٔ مجازی که دندانه‌ها را جدا می‌کنند نباید قبل از آنها در محاسبه بیاید.
+        # مثلاً «اسباب‌بازیها» نباید دندانهٔ «اسباب‌باز» محاسبه شود 
+        # در نتیجه کلمهٔ «اسباب‌بازیها» را هم باید قبول کند.
+        for SeperatCharacter in [PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_TA, PERSIAN_ZA, PERSIAN_LAM, ZWNJ,
+                                 PERSIAN_WAW, PERSIAN_DAL, PERSIAN_ZAL, PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE,
+                                 PERSIAN_HAMZE, PERSIAN_KAF, PERSIAN_GAF, ARABIC_TE]:
+            if  SeperatCharacter in word:
+                word=word.split(SeperatCharacter)[1]
+        
         for i, c in enumerate(word):
 
             if c == PERSIAN_BE  or \
@@ -116,7 +131,7 @@ class Lilak:
                     if n != ZWNJ:
                         dandane = dandane + 1
 
-        return (dandane < 10)
+        return (dandane < 5)
 
 
     def read_lexicon(self, filename):
