@@ -65,7 +65,7 @@ PERSIAN_HAMZE = '\u0621'
 PERSIAN_LAM   = '\u0644'
 PERSIAN_KAF   = '\u06A9'
 PERSIAN_GAF   = '\u06AF'
-Arabic_TE     = '\u0629'
+ARABIC_TE     = '\u0629'
 
 PERSIAN_DETACHED = (PERSIAN_WAW, PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_ZAL, \
                     PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE, PERSIAN_HAMZE)
@@ -105,7 +105,7 @@ class Lilak:
         # در نتیجه کلمهٔ «اسباب‌بازیها» را هم باید قبول کند.
         for SeperatCharacter in [PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_TA, PERSIAN_ZA, PERSIAN_LAM, ZWNJ,
                                  PERSIAN_WAW, PERSIAN_DAL, PERSIAN_ZAL, PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE,
-                                 PERSIAN_HAMZE, PERSIAN_KAF, PERSIAN_GAF, Arabic_TE]:
+                                 PERSIAN_HAMZE, PERSIAN_KAF, PERSIAN_GAF, ARABIC_TE]:
             if  SeperatCharacter in word:
                 word=word.split(SeperatCharacter)[1]
         
