@@ -113,10 +113,15 @@ SFX si      N        1
 SFX si      0        ‌هاست/FFWW     .
 
 
-SFX sj      N        2
+SFX sj      N        8
 SFX sj      0        ان/sa          .
 SFX sj      0        انی/FFWW       .
-
+SFX sj      0        انم/FFWW       .
+SFX sj      0        انت/FFWW       .
+SFX sj      0        انش/FFWW       .
+SFX sj      0        انمان/FFWW       .
+SFX sj      0        انتان/FFWW       .
+SFX sj      0        انشان/FFWW       .
 
 SFX sk      N        2
 SFX sk      0        ‌ی/FFWW        .
