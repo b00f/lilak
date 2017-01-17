@@ -27,7 +27,7 @@ FLAG long
 
 TRY {2}
 KEY ضصثقفغعهخحجچپ|شسیبلاتنمکگ|ظطزرذدئو
-IGNORE ًٌٍَُِّـْ
+IGNORE ًٌٍَُِّـْٰٔ
 
 NOSPLITSUGS
 
