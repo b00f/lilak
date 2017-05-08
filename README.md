@@ -5,7 +5,8 @@ In Persian language affixes can change the meaning of the word. Some suffixes at
 Lilak has a lexicon of Persian words with part-of-speech tags. Lilak builds a dictionary for hunspell to predict the best form of compound words based on morphological rules.
 Lilak works under Python3.
 
-##Content 
+## Content 
+
 ```
 lilak
   |-- build           : Build folder. 
@@ -36,7 +37,7 @@ lilak
   \-- LICENCE         : License file
 ```
 
-##Building Dictionary
+## Building Dictionary
 
 To build dictionary, run lilak.py from 'src' folder:
 ```
@@ -44,7 +45,7 @@ python lilak.py
 ```
 You can find the compiled dictionary at the 'build' folder.
 
-##Testing
+## Testing
 
 Before running test make sure you have installed hunspell:
 ```
@@ -56,7 +57,7 @@ python dotest.py
 ```
 You can find the result at 'result.log' file
 
-##How to contribute
+## How to contribute
 
 The best way that you can contribute on this project is collecting words with 
 part-of-speech tags. It will help me to make dictionary more useful and accurate.
@@ -70,7 +71,8 @@ Also if you found a mistakes please report it via email to me.
 
 If you have any questions about the project, please don't hesitate to ask.
 
-##Installing Lilak
+## Installing Lilak
+
 You can download compiled dictionaries at [sourceforge](http://sourceforge.net/projects/lilak/).
 
 For installing Lilak on OpenOffice just check [here](http://extensions.openoffice.org/en/project/persian-dictionary-apache-openoffice/).
@@ -80,16 +82,18 @@ For installing Lilak on Mozilla Firefox just check [here](https://addons.mozilla
 For installing Lilak on Google Chrome: Go to Settings. Find Language and input settings. Add Persian language and make sure you have enabled the specll checker option.
 
 
-##About the Name
+## About the Name
 
 lilac in English came from French lilac "shrub of genus Syringa with mauve flowers" 
 from Spanish lilac, from Arabic lilak, from Persian lilak, variant of nilak "bluish"
 
-##In Memory of Abolhassan Najafi
+## In Memory of Abolhassan Najafi
+
 [Abolhassan Najafi](https://en.wikipedia.org/wiki/Abolhassan_Najafi) was an associate member of Iran's Academy of Persian Language and Literature. His most famous books is "Ghalat Nanevisim" (Let’s not write incorrect). 
 
 
-##Thanks
+## Thanks
+
 Special thanks to 
 * Dr. Hamid Farrroukh : [alefbaye2om](http://alefbaye2om.org/) 
 * Dr. Hamid Hassani : [wikipedia](https://en.wikipedia.org/wiki/Hamid_Hassani)
