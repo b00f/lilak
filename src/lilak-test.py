@@ -52,7 +52,7 @@ def run_test(filename):
                 not_detected = not_detected + 1
                 suggests = ''
                 for s in hobj.suggest(word):
-                    suggests += s.decode('utf-8')
+                    suggests += s
                     suggests += ', '
                 result.write('{0} -> {1}\n'.format(word, suggests[:-2]))
             else:
