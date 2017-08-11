@@ -430,9 +430,9 @@ class Lilak:
                             label += ''     # اشربه
 
                     elif word.endswith(PERSIAN_YE):
-                        label += 'sc'   # فتاوی‌ام، فتاوی‌ات، فتاوی‌اش، فتاوی‌مان، فتاوی‌تان، فتاوی‌شان
-                        label += 'sp'   # فتاوی‌ام، فتاوی‌ای، فتاوی‌ایم، فتاوی‌اید، فتاوی‌اند
-                        label += 'sm'   # فتاوی‌ای
+                        label += 'sc'   # فناوی‌ام، فناوی‌ات، فناوی‌اش، فناوی‌مان، فناوی‌تان، فناوی‌شان
+                        label += 'sp'   # فناوی‌ام، فناوی‌ای، فناوی‌ایم، فناوی‌اید، فناوی‌اند
+                        label += 'sm'   # فناوی‌ای
 
                     elif word.endswith(PERSIAN_WAW):
                         debug('unpredicted case for: ' + word + ':' + pos)
