@@ -53,7 +53,7 @@ pip install hunspell
 ```
 To test Lilak, run dotest.py from 'test' folder:
 ```
-python dotest.py
+python lilak-test.py
 ```
 You can find the result at 'result.log' file
 
