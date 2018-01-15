@@ -1,6 +1,6 @@
 # Lilak, Persian Spell Checking Dictionary
 
-[Lilak](https://github.com/bird-alone/lilak) is an open source project for generating Persian dictionary for [hunspell](https://github.com/hunspell/hunspell) spell checker based on Persian Morphology. 
+[Lilak](https://github.com/b00f/lilak) is an open source project for generating Persian dictionary for [hunspell](https://github.com/hunspell/hunspell) spell checker based on Persian Morphology. 
 In Persian language affixes can change the meaning of the word. Some suffixes attached to a word as short form of verbs. For detecting these suffixes we need to know the part-of-speech and in some cases the exact pronunciation of the word.
 Lilak has a lexicon of Persian words with part-of-speech tags. Lilak builds a dictionary for hunspell to predict the best form of compound words based on morphological rules.
 Lilak works under Python3.
