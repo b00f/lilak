@@ -54,6 +54,7 @@ You can find the compiled dictionary at the `build` folder.
 
 Before running test make sure you have installed [hunspell](https://github.com/hunspell/hunspell):
 ```
+sudo apt-get install libhunspell-dev
 pip install hunspell
 cd src
 python test.py
