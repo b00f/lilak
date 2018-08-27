@@ -1,4 +1,4 @@
-# Lilak, Persian Spell Checking Dictionary
+# Lilak, Persian Spell Checking Dictionary  [![Build Status](https://travis-ci.org/b00f/lilak.svg?branch=master)](https://travis-ci.org/b00f/lilak)
 
 Lilak is an open source project for generating Persian dictionary for [hunspell](https://github.com/hunspell/hunspell) spell checker based on Persian Morphology.
 
