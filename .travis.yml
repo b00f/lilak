@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+before_install:
+  - sudo apt-get install libhunspell-dev
+  - pip install hunspell
+  
+script:
+ - cd src
+ - python3 lilak.py
+ - python3 test.py
