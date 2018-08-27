@@ -101,14 +101,14 @@ class Lilak:
         # http://www.persianacademy.ir/fa/pishvand.aspx
         # هرگاه کلمه پردندانه (بیش­از سه دندانه) شود و یا به «ط» و «ظ» ختم شود.
         # نویسه‌های «ورزژدذط ظ ک گ ا لءة» و فاصلهٔ مجازی که دندانه‌ها را جدا می‌کنند نباید قبل از آنها در محاسبه بیاید.
-        # مثلاً «اسباب‌بازیها» نباید دندانهٔ «اسباب‌باز» محاسبه شود 
+        # مثلاً «اسباب‌بازیها» نباید دندانهٔ «اسباب‌باز» محاسبه شود
         # در نتیجه کلمهٔ «اسباب‌بازیها» را هم باید قبول کند.
         for SeperatCharacter in [PERSIAN_ALEF, PERSIAN_DAL, PERSIAN_TA, PERSIAN_ZA, PERSIAN_LAM, ZWNJ,
                                  PERSIAN_WAW, PERSIAN_DAL, PERSIAN_ZAL, PERSIAN_RE, PERSIAN_ZE, PERSIAN_ZHE,
                                  PERSIAN_HAMZE, PERSIAN_KAF, PERSIAN_GAF, ARABIC_TE]:
             if  SeperatCharacter in word:
                 word=word.split(SeperatCharacter)[1]
-        
+
         for i, c in enumerate(word):
 
             if c == PERSIAN_BE  or \
@@ -212,7 +212,7 @@ class Lilak:
         letters_s.reverse()
 
         affix = ''
-        with open('affixes', 'r', encoding='utf-8') as f:
+        with open('./data/affixes', 'r', encoding='utf-8') as f:
             affix = f.read()
 
         remove_file(filename)
@@ -229,7 +229,7 @@ class Lilak:
 
         # dict_delta (foreign words)
         dic_delta = set()
-        with open('dic_delta', 'r', encoding='utf-8') as f:
+        with open('./data/dic_delta', 'r', encoding='utf-8') as f:
             for line in f.readlines():
                 word = line[:-1].strip()
 
@@ -284,9 +284,9 @@ class Lilak:
 
         ### Noun ########################################################################################
                 elif pos == 'noun_common_singular':
-                    
+
                     label += 'pa'   # بی‌انگیزه، بی‌حوصله، بی‌خانه
-                    
+
                     if word.endswith(PERSIAN_HE):
                         if ends_with_aah_uh:
                             label += 'sa'   # نگاهم، نگاهت، نگاهش، نگاهمان، نگاهتان، نگاهشان
@@ -789,7 +789,7 @@ class Lilak:
 
                     else:
                         debug('adjective_participle should ends with HE only: ' + word + ':' + pos)
-                                            
+
                 elif pos == 'adjective_comparative':
                     if word.endswith(PERSIAN_HE):
                         debug('unpredicted case for: ' + word + ':' + pos)
@@ -966,9 +966,9 @@ if __name__ == '__main__':
         lilak.dump_dictionary(args.output)
     else:
         lilak = Lilak()
-        lilak.read_lexicon('lexicon')
+        lilak.read_lexicon('./data/lexicon')
         lilak.pars_main_dic()
-        lilak.pars_user_dic('dic_users')
+        lilak.pars_user_dic('./data/dic_users')
         lilak.dump_affixes('../build/fa_IR.aff')
         lilak.dump_dictionary('../build/fa_IR.dic')
 
