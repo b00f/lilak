@@ -35,7 +35,7 @@ import shutil
 import datetime
 import argparse
 
-VERSIAN = '3.0'
+VERSIAN = '3.2'
 DEBUG = 1  # set to 1 to generate a debug output file
 
 ZWNJ          = '\u200C'
@@ -226,30 +226,6 @@ class Lilak:
         if not os.path.isfile(filename):
             debug('file does not exist: %s' % filename)
             return
-
-        # dict_delta (foreign words)
-        dic_delta = set()
-        with open('./data/dic_delta', 'r', encoding='utf-8') as f:
-            for line in f.readlines():
-                word = line[:-1].strip()
-
-                if word.startswith('#'):
-                    continue
-
-                if not word:
-                    continue
-
-                if word not in self.dictionary:
-                    #debug(word)
-                    dic_delta.add(word)
-
-        dic_delta_s = sorted(dic_delta)
-
-        remove_file('../build/fa_IR.dic_delta')
-        with open('../build/fa_IR.dic_delta', 'w', encoding='utf-8', newline='') as f:
-            for word in dic_delta_s:
-                f.write(word + '\n')
-
 
     def dump_dictionary(self, filename):
         debug('dump dictionary')
@@ -969,7 +945,7 @@ if __name__ == '__main__':
         lilak.read_lexicon('./data/lexicon')
         lilak.pars_main_dic()
         lilak.pars_user_dic('./data/dic_users')
-        lilak.dump_affixes('../build/fa_IR.aff')
-        lilak.dump_dictionary('../build/fa_IR.dic')
+        lilak.dump_affixes('../build/fa-IR.aff')
+        lilak.dump_dictionary('../build/fa-IR.dic')
 
     debug('done!')
