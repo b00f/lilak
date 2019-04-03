@@ -6,5 +6,6 @@ python:
   - "3.6"
 
 script:
- - make
+ - mkdir build
+ - make build
  #- make extensions
