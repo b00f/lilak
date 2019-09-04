@@ -776,8 +776,7 @@ class Lilak:
                         label += ''
 
                     elif word.endswith(PERSIAN_YE):
-                        debug('unpredicted case for: ' + word + ':' + pos)
-                        label += ''
+                        label += '' # بارزتری، جوانتری
 
                     elif word.endswith(PERSIAN_DETACHED):
                         label += 'sa'   # ارشدم، ارشدت، ارشدش، ارشدمان، ارشدتان، ارشدشان
