@@ -1,10 +1,12 @@
-# Lilak, Persian Spell Checking Dictionary  [![Build Status](https://travis-ci.org/b00f/lilak.svg?branch=master)](https://travis-ci.org/b00f/lilak)
+# Lilak, Persian Spell Checking Dictionary
+  [![Build Status](https://travis-ci.org/b00f/lilak.svg?branch=master)](https://travis-ci.org/b00f/lilak)
+  [![Donate](https://img.shields.io/badge/support-patreon-F96854.svg?style=flat-square)](https://patreon.com/b00f)
 
 [Lilak](https://github.com/b00f/lilak) is an open source project for generating Persian dictionary for [hunspell](https://github.com/hunspell/hunspell) spell checker based on Persian Morphology.
 
 In Persian language affixes can change the meaning of the word. Some suffixes attached to a word as short form of verbs. Part-of-speech plays an important role in Persian language. In some cases the pronunciation of the word can change the suffixes. Check the code for more information.
 
-Lilak has a lexicon of Persian words with part-of-speech tags. Lilak builds a dictionary for hunspell to predict the best form of compound words based on morphological rules.
+Lilak has a [lexicon](http://lilak-project.com) of Persian words with part-of-speech tags. Lilak builds a dictionary for hunspell to predict the best form of compound words based on morphological rules.
 
 ## Content
 
@@ -57,8 +59,8 @@ check `result.log` for test result.
 ## How to contribute
 
 The best way you can contribute on this project is collecting words with correct part-of-speech tags.
-Part-of-speech is important to build lilak. It should classified in main types like: verb, noun, adjective, etc. Also some other tags will be useful. like tense of verb, singular or plural, etc.
-Check the `src/data/Lexicon` for more information
+Part-of-speech is important to build Lilak. It should classified in main types like: verb, noun, adjective, etc. Also some other tags will be useful. like tense of verb, singular or plural, etc.
+Check the `src/data/lexicon` for more information
 
 Please open an issue if you find any mistakes while using lilak.
 
@@ -67,6 +69,14 @@ Please open an issue if you find any mistakes while using lilak.
 - You can find compiled dictionaries [here](https://github.com/b00f/lilak/releases/).
 - Mozilla Firefox: Install lilak extension from here [here](https://addons.mozilla.org/en-US/firefox/addon/lilak-persian-dictionary/).
 - Google Chrome: Go to Settings, find Language and input settings, add Persian language and make sure you have enabled the spell checker option.
+
+## Supporting Lilak
+If you like this project, please [donate](http://lilak-project.com/donate.php) or consider becoming a patron:
+
+[![Become a patron](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://patreon.com/b00f)
+
+## License
+Lilak is published under Apache licence. You may freely use, reproduce, modify or distribute it. If you think lilak is useful please support it.
 
 ## About the Name
 
