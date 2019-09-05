@@ -203,7 +203,7 @@ class Lilak:
         for word in self.words:
             for letter in word:
                 if letter == '/':
-                    break;
+                    break
 
                 letters[letter] += 1
 
@@ -761,6 +761,10 @@ class Lilak:
                             label += 'sg'   # شایسته‌ها
                                             # شایسته‌های
                                             # شایسته‌هایی
+                            label += 'su'   # شایسته‌تر، شایسته‌ترین
+                                            # شایسته‌تری
+                                            # شایسته‌ترها، شایسته‌ترهای
+                                            # شایسته‌ترین‌ها، شایسته‌ترین‌های
                             label += 'si'   # شایسته‌هاست
 
                     else:
