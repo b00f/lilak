@@ -54,7 +54,7 @@ make test
 
 You can find the compiled dictionary at the `build` folder.
 
-check `result.log` for test result.
+check [result.log](./test/result.log) for test result.
 
 ## How to contribute
 

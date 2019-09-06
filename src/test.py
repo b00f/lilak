@@ -21,7 +21,7 @@
 
 import hunspell
 hobj = hunspell.HunSpell('../build/fa-IR.dic', '../build/fa-IR.aff')
-result = open('result.log', 'w', encoding='utf-8')
+result = open('../test/result.log', 'w', encoding='utf-8')
 
 detected = 0
 not_detected = 0
@@ -42,7 +42,7 @@ def run_test(filename):
 
         tokens = line[:-1].split(' ')
         for token in tokens:
-            word = token.strip((' ?.!؟»«،:؛()-"/\\\t\'…'))
+            word = token.strip((' ?.!؟»«،:؛()[]-"/\\\t\'…'))
 
             # ignore commented words
             if word.startswith('#'):
@@ -54,7 +54,7 @@ def run_test(filename):
                 for s in hobj.suggest(word):
                     suggests += s
                     suggests += ', '
-                result.write('{0} -> {1}\n'.format(word, suggests[:-2]))
+                result.write('*{0}: {1}\n'.format(word, suggests[:-2]))
             else:
                 detected = detected + 1
             ##     stems = ''

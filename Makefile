@@ -1,11 +1,13 @@
-all: build test
+all: hunspell build test
+
+hunspell:
+	sudo apt-get install libhunspell-dev
+	pip3 install hunspell
 
 build:
 	cd src && python3 lilak.py
 
 test:
-	sudo apt-get install libhunspell-dev
-	pip3 install hunspell
 	cd src && python3 test.py
 
 extensions:
