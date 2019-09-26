@@ -684,17 +684,7 @@ class Lilak:
 
         ### Number ########################################################################################
                 elif pos == 'numeral':
-                    if word.endswith(PERSIAN_DETACHED):
-                        label += 'sd'
-                    else:
-                        label += 'sg'
-                        if kam_dandane:
-                            label += 'sd'   # میلیونها
-                                            # میلیونهای
-                                            # میلیونهایی
-                            label += 'sf'   # میلیونهاست
-                    label += 'sl'   # میلیونی، میلیاردی
-
+                    label += ''
         ### Neda ########################################################################################
                 elif pos == 'interjection':
                     label += ''
