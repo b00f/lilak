@@ -680,33 +680,7 @@ class Lilak:
 
         ### Pronoun ########################################################################################
                 elif pos == 'pronoun':
-                    if word.endswith(PERSIAN_HE):
-                        if ends_with_aah_uh:
-                            debug('unpredicted case for: ' + word + ':' + pos)
-                            label += ''
-                        elif  ends_with_vowel:
-                            label += 'sp'   # آنچه‌ام، آنچه‌ای، آنچه‌ایم، آنچه‌اید، آنچه‌اند
-                        else:
-                            label += ''
-
-                    elif word.endswith(PERSIAN_WAW):
-                        if ends_with_vowel:
-                            label += 'sq'   # همویم، همویی، هموست، هموییم، همویید، همویند
-                        else:
-                            label += ''     # تو
-
-                    elif word.endswith(PERSIAN_YE):
-                        ### [???]  بعضی‌مان، بعضی‌تان، بعضی‌شان
-                        label += 'sp'   # چی‌ام، چی‌ای، چی‌ایم، چی‌اید، چی‌اند
-
-                    elif word.endswith(PERSIAN_ALEF):
-                        label += 'sq'   # آنهایم، آنهایی، آنهاست، آنهاییم، آنهایید، آنهایند
-
-                    elif word.endswith(PERSIAN_DETACHED):
-                        label += 'so'   # دگرم، دگری، دگرست، دگریم، دگرید، دگرند
-
-                    else:
-                        label += 'so'   # آنم، آنی، آنست، آنیم، آنید، آنند
+                    label += ''
 
         ### Number ########################################################################################
                 elif pos == 'numeral':
