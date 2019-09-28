@@ -95,9 +95,9 @@ class Lilak:
 
     def is_kam_dandane(self, word):
         if self.mode == 1:
-            return 0
+            return True
 
-        dandane = 0;
+        dandane = 0
         # http://www.persianacademy.ir/fa/pishvand.aspx
         # هرگاه کلمه پردندانه (بیش­از سه دندانه) شود و یا به «ط» و «ظ» ختم شود.
         # نویسه‌های «ورزژدذط ظ ک گ ا لءة» و فاصلهٔ مجازی که دندانه‌ها را جدا می‌کنند نباید قبل از آنها در محاسبه بیاید.
