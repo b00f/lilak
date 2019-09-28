@@ -94,7 +94,7 @@ class Lilak:
 
 
     def is_kam_dandane(self, word):
-        if self.mode == 1:
+        if self.mode == 'tihu':
             return True
 
         dandane = 0
@@ -730,7 +730,7 @@ if __name__ == '__main__':
     parser.add_argument("-o", "--output", help="input dictionary file")
     args = parser.parse_args()
 
-    if args.mode:
+    if args.mode == 'tihu':
         lilak = Lilak(args.mode)
         lilak.read_lexicon(args.input)
         lilak.pars_main_dic()
