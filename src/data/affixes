@@ -186,7 +186,9 @@ SFX su      N        2
 SFX su      0        ‌تر/sdslso     .
 SFX su      0        ‌ترین/sgso     .
 
-
+## Ye With Kasre-Ezafe
+SFX sv      N        1
+SFX sv      0        ی             .
 
 REP 9
 REP ي   ی
