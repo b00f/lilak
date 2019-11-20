@@ -35,7 +35,7 @@ import shutil
 import datetime
 import argparse
 
-VERSIAN = '3.2'
+VERSIAN = '3.3'
 DEBUG = 1  # set to 1 to generate a debug output file
 
 ZWNJ          = '\u200C'
@@ -732,6 +732,7 @@ if __name__ == '__main__':
     parser.add_argument("-m", "--mode", help="Run mode")
     parser.add_argument("-i", "--input", help="input lexicon file")
     parser.add_argument("-o", "--output", help="input dictionary file")
+    parser.add_argument('-v', '--version', action='version', version=VERSIAN)
     args = parser.parse_args()
 
     if args.mode == 'tihu':

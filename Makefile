@@ -1,3 +1,5 @@
+VERSION=$(shell python3 src/lilak.py -v)
+
 all: hunspell build test
 
 hunspell:
@@ -12,15 +14,30 @@ test:
 
 extensions:
 	# mozila xpi
-	rm -rf ./build/mozile ./build/fa-IR-dictionary.xpi
-	mkdir -p ./build/mozile ./build/mozile/dictionaries ./build/mozile/icons
-	cp ./LICENSE ./build/mozile/LICENSE
-	cp ./icon.png ./build/mozile/icon.png
-	cp ./README_fa_IR.txt ./build/mozile/dictionaries/README_fa_IR.txt
-	cp ./build/fa-IR.dic  ./build/mozile/dictionaries/fa-IR.dic
-	cp ./build/fa-IR.aff  ./build/mozile/dictionaries/fa-IR.aff
-	echo '{ "manifest_version": 2, "dictionaries": { "fa-IR": "dictionaries/fa-IR.dic" }, "applications": { "gecko": { "id": "fa-IR@dictionaries.addons.mozilla.org" } }, "name": "Lilak", "version": "3.2", "description": "Lilak, Persian Spell Checking Dictionary" }' > ./build/mozile/manifest.json
-	cd ./build/mozile && zip -r ../fa-IR-dictionary.xpi *
+	rm -rf ./build/mozila ./build/fa-IR-dictionary.xpi
+	mkdir -p ./build/mozila
+	cp ./build/fa-IR.dic  ./build/mozila/fa-IR.dic
+	cp ./build/fa-IR.aff  ./build/mozila/fa-IR.aff
+	cp ./LICENSE ./build/mozila/LICENSE
+	cp ./icon.png ./build/mozila/icon.png
+	cp ./src/data/README_fa_IR.txt ./build/mozila/README_fa_IR.txt
+	cp ./src/data/manifest.json ./build/mozila/manifest.json
+	sed -i 's/%VER%/$(VERSION)/g' ./build/mozila/manifest.json
+	cd ./build/mozila && zip -r ../fa-IR-dictionary.xpi *
+
+	# LibreOffice oxt
+	rm -rf ./build/libre ./build/fa-IR-dictionary.oxt
+	mkdir -p ./build/libre ./build/libre/META-INF
+	cp ./build/fa-IR.dic  ./build/libre/fa-IR.dic
+	cp ./build/fa-IR.aff  ./build/libre/fa-IR.aff
+	cp ./LICENSE ./build/libre/LICENSE
+	cp ./icon.png ./build/libre/icon.png
+	cp ./src/data/META-INF/manifest.xml ./build/libre/META-INF/manifest.xml
+	cp ./src/data/README_fa_IR.txt ./build/libre/README_fa_IR.txt
+	cp ./src/data/dictionaries.xcu ./build/libre/dictionaries.xcu
+	cp ./src/data/description.xml ./build/libre/description.xml
+	sed -i 's/%VER%/$(VERSION)/g' ./build/libre/description.xml
+	cd ./build/libre && zip -r ../fa-IR-dictionary.oxt *
 
 	# chromium bdic
 	rm -rf ~/chromium ~/depot_tools;

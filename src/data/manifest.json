@@ -1,0 +1,17 @@
+{
+    "manifest_version": 2,
+    "dictionaries": {
+        "fa-IR": "fa-IR.dic"
+    },
+    "applications": {
+        "gecko": {
+            "id": "fa-IR@dictionaries.addons.mozilla.org"
+        }
+    },
+    "icons": {
+        "48": "icon.png"
+    },
+    "name": "Lilak",
+    "version": "%VER%",
+    "description": "Lilak, Persian Spell Checking Dictionary"
+}
