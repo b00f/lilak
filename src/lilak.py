@@ -554,7 +554,7 @@ class Lilak:
                                         # آبادتری
                                         # آبادترها، آبادترهای
                                         # آبادترین‌ها، آبادترین‌های
-                        label += 'sj'   # آبادان، تنومندان، آبادانی، تنومندانی
+                        label += 'sj'   # تنومندان، تنومندانی
 
                     elif word.endswith(PERSIAN_TA) or \
                          word.endswith(PERSIAN_ZA):
