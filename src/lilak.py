@@ -35,6 +35,8 @@ import shutil
 import datetime
 import argparse
 
+from pathlib import Path
+
 VERSIAN = '3.3'
 DEBUG = 1  # set to 1 to generate a debug output file
 
@@ -216,6 +218,7 @@ class Lilak:
             affix = f.read()
 
         remove_file(filename)
+        Path(os.path.dirname(filename)).mkdir(parents=True, exist_ok=True)
         with open(filename, 'w', encoding='utf-8', newline='') as f:
             frequency = ''
             for letter in letters_s:
@@ -234,6 +237,7 @@ class Lilak:
         words_s = sorted(self.words)
 
         remove_file(filename)
+        Path(os.path.dirname(filename)).mkdir(parents=True, exist_ok=True)
         with open(filename, 'w', encoding='utf-8', newline='') as f:
             f.write('{0}\n'.format(len(words_s)))
             for word in words_s:
